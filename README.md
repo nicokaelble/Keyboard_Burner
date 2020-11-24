@@ -5,3 +5,5 @@ With keyboard burner you not only take your typing speed to another level but al
 
 It also is my first Website Project, so please do not get mad about bugs but report them to me at nicokaelble@gmail.com :)
 
+There are also special countdown sound effects used ^^
+
