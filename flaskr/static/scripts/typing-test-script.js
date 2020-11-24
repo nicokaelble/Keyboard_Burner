@@ -235,10 +235,3 @@ async function renderNewQuote() {
   authorDisplayElement.innerText = "~ " + author;
   quoteInputElement.value = null;
 }
-
-
-
-
-
-
-

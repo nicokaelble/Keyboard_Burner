@@ -41,10 +41,6 @@ def create_app(test_config=None):
     def about():
         return render_template('/about.html')
 
-    @app.route('/profile')
-    def profile():
-        return render_template('/profile.html')
-
     # @app.route("/test" , methods=['GET', 'POST'])
     # def test():
     #     select = request.form.get('comp_select')

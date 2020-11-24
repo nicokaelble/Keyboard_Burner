@@ -110,7 +110,22 @@ def login():
             return redirect(url_for('home'))
 
     # if GET: reder login page
-    return render_template('auth/login.html', username=username)
+    return render_template('auth/login.html', username=username)#
+
+@bp.route('/profile')
+def profile():
+    userId = g.user['id']
+
+    typingtests = get_db().execute(
+    'SELECT *' 
+    ' FROM testresult t LEFT JOIN user u ON t.userId = u.id'
+    ' WHERE u.id = ?'
+    ' ORDER BY t.testdate ASC',
+    (userId,)
+    ).fetchall()
+
+    return render_template('auth/profile.html', typingtests=typingtests)
+
 
 # page to logout and redirect to index page
 @bp.route('/logout')

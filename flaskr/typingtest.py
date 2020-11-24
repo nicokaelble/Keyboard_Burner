@@ -26,9 +26,9 @@ def settings():
 @bp.route('/test', methods=('GET', 'POST'))
 def test():
     typingtests = get_db().execute(
-        'SELECT *'
-        'FROM testresult t JOIN user u ON t.userId = u.id'
-        #'ORDER BY testdate'
+        'SELECT *' 
+        ' FROM testresult t LEFT JOIN user u ON t.userId = u.id'
+        ' ORDER BY t.speed DESC'
     ).fetchall()
 
     if request.method == 'POST':
@@ -50,21 +50,38 @@ def result():
         db = get_db()
 # CREATE TABLE testresult(
 #   testdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-#   userId INTEGER NOT NULL,
+#   userId INTEGER,
 #   characters INTEGER NOT NULL,
 #   mistakes INTEGER NOT NULL,
 #   duration INTEGER NOT NULL,
 #   speed INTEGER NOT NULL,
 #   accuracy DOUBLE NOT NULL,
 #   FOREIGN KEY (userId) REFERENCES user (id)
-# );
+# );    
+        if g.user is not None:
+            #user is logged in
+            userId = g.user['id']
 
-        db.execute(
+            #insert test result with userId
+            db.execute(
             'INSERT INTO testresult (userId, characters, mistakes, duration, speed, accuracy)'
             'VALUES (?, ?, ?, ?, ?, ?)',
-            (g.user['id'], correctCharacters, backspaceCount, testDuration, speed, accuracy)
-        )
-        db.commit()
+            (userId, correctCharacters, backspaceCount, testDuration, speed, accuracy)
+            )
+            db.commit()
+        else:
+            #no user is logged in
+            print("No user loggid in... write to db")
+            #insert test result without id
+            db.execute(
+            'INSERT INTO testresult (characters, mistakes, duration, speed, accuracy)'
+            'VALUES ( ?, ?, ?, ?, ?)',
+            (correctCharacters, backspaceCount, testDuration, speed, accuracy)
+            )
+            db.commit()
+
+        
+        
         
         return render_template('/typingtest/result.html', speed=speed, correctCharacters=correctCharacters, 
         backspaceCount=backspaceCount, testDuration=testDuration, accuracy=accuracy)

@@ -27,6 +27,81 @@
     <link href="../static/style/custom.css" rel="stylesheet">
     <link href="../static/style/typing-test-style.css" rel="stylesheet">
 
+    <!-- Import Google Line Chart insertet here because jinja tags don't work in external .js files-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" >
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+    
+        function drawChart() {
+    
+        var data = google.visualization.arrayToDataTable([
+        ['Test Nr.', 'Speed', 'Mistakes'],
+            {% if typingtests %}
+                {% for row in typingtests %}
+                    ['Test{{ loop.index }}', {{ row.speed }}, {{ row.mistakes }}],
+                {% endfor %}
+            {% endif %}
+        ]);
+    
+    
+        var options = {
+            
+            title: 'Progress',
+            subtitle: 'Speed in correct Characters per minute and accuracy in %',
+            legend: { position: 'right' },
+            
+        };
+    
+        var chart = new google.visualization.LineChart(document.getElementById('line_chart'));
+    
+        chart.draw(data, options);
+    }
+    </script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'Test Number');
+      data.addColumn('number', 'Speed');
+      data.addColumn('number', 'Mistakes');
+
+      data.addRows([
+        {% if typingtests %}
+            {% for row in typingtests %}
+                [{{ loop.index }}, {{ row.speed }}, {{ row.mistakes }}],
+            {% endfor %}
+        {% endif %}
+      ]);
+
+      var options = {
+        chart: {
+          title: 'Personal typing progress',
+          subtitle: 'in millions of dollars (USD)'
+        },
+        width: 900,
+        height: 500,
+        axes: {
+          x: {
+            0: {side: 'top'}
+          }
+        }
+      };
+
+      var chart = new google.charts.Line(document.getElementById('line_top_x'));
+
+      chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+  </script>
+
+
+    <!-- Custom JavaScript -->
+    <script type="text/javascript" src="../static/scripts/script.js"></script>
 </head>
 
 <body style="background-color: #F9F9F7;" onload="setCurrentPage()">
@@ -59,7 +134,7 @@
                         <a class="navbar-brand" style="margin-right: 0px;" href="# ">
                             <img src="../static/images/user-white.png" height="50px " alt=" ">
                         </a>
-                        <a href="{{ url_for('profile') }}" style="color: white;">
+                        <a href="{{ url_for('auth.profile') }}" style="color: white;">
                             {{ g.user['username'] }}
                         </a>
                     </p>
@@ -123,11 +198,6 @@
     <div id="content">
         {% block content %} {% endblock content %}
     </div>
-
-
-    <!-- Optional JavaScript -->
-    <script type="text/javascript" src="../static/scripts/script.js"></script>
-
 </body>
 
 </html>
