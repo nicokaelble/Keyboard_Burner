@@ -1,0 +1,117 @@
+{% extends "base.html" %} {% block content %}
+
+<main role="main" class="container" onload="setup()"
+    style="background-color: #6c757d; border-radius: 15px; padding: 15px; margin-top: 20px;">
+    <audio controls style="visibility: hidden; width: 0px; height: 0px;" id="countdownSound">
+        <source src="../../static/audio/countdown.mp3" type="audio/mpeg">
+    </audio>
+    <div class="row">
+        <div class="col d-flex justify-content-between" style="padding: 0px;">
+            <!-- flex element left-->
+            <div class="p-2" style="width: 120px;">
+                <form action="/typingtest/settings" style="margin-left: 25px; margin-top: 15px;">
+                    <input class="btn btn-primary" type="submit" value="Settings" />
+                </form>
+
+            </div>
+            <!-- flex element middle -->
+            <div class="p-2 justify-content-center" style="width: 120px;">
+                <h3 style="color: #f9f9f7; text-align: center;">Timer:</h3>
+                <h1 class="timer" id="timer"
+                    style="color: #f9f9f7; text-align: center; margin-bottom: 20px; font-size: 80px">
+                    <!-- set default timer time if not specified from settings -->
+                    {% if timerStartigValue %}
+                    {{ timerStartigValue  }}
+                    {% else %}
+                    60
+                    {% endif %}
+                </h1>
+
+            </div>
+            <!-- flex element right -->
+            <div class="p-2" style="width: 120px;">
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col"
+                style="margin-bottom: 30px; height: 300px; margin-left: 45px; margin-right: 45px; background-color: #F9F9F7; padding: 15px; border-radius: 15px;">
+                <h3 class="quote-display" id="quoteDisplay">
+                </h3>
+                <p class="author-display" style="text-align: right; margin-right: 50px;" id="authorDisplay"></p>
+
+            </div>
+        </div>
+        <div class="row" style="padding-left: 45px; padding-right: 45px;">
+            <textarea class="quote-input form-control" id="quoteInput" rows="1"></textarea>
+        </div>
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <Button id="btnStartTest" class="btn btn-success btn-lg" onclick="btnStartTest_Click()"
+                    style="margin-bottom: 20px; margin-top: 20px;">Start Test</Button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <Button id="btnStartTest" class="btn btn-success btn-lg" onclick="btnTest_Click()"
+                style="margin-bottom: 20px; margin-top: 20px;">Test</Button>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-left" style="padding-left: 20px;">
+        <h1>Leaderboard</h1>
+    </div>
+    
+
+    <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">User</th>
+            <th scope="col">Speed</th>
+            <th scope="col">Test Duration</th>
+            <th scope="col">Mistakes</th>
+            <th scope="col">Correct Characters</th>
+            <th scope="col">Accuracy</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% if typingtests %}
+            {% for test in typingtests %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ test.username }}</td>
+                    <td>{{ test.speed }}</td>
+                    <td>{{ test.duration }}</td>
+                    <td>{{ test.mistakes }}</td>
+                    <td>{{ test.characters }}</td>
+                    <td>{{ test.accuracy }}</td>
+                    <td>{{ test.testdate }}</td>
+                </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+      </table>
+</main>
+
+
+
+<!-- hidden input to post data to testresult data on hidden submit -->
+<form action="{{ url_for('typingtest.result') }}" id="testResult" method="post">
+    <input type="text" name="speed" id="speed" style="visibility: hidden; width: 0px; height: 0px;" value="unknown">
+    <input type="text" name="correctCharacters" id="correctCharacters" style="visibility: hidden; width: 0px; height: 0px;" value="unknown">
+    <input type="text" name="backspaceCount" id="backspaceCount" style="visibility: hidden; width: 0px; height: 0px;" value="unknown">
+    <input type="text" name="testDuration" id="testDuration" style="visibility: hidden; width: 0px; height: 0px;" value="unknown">
+    <input type="text" name="accuracy" id="accuracy" style="visibility: hidden; width: 0px; height: 0px;" value="unknown">
+</form>
+
+<!-- JavaScript for typing test -->
+<script type="text/javascript" src="../../static/scripts/typing-test-script.js"></script>
+
+{% endblock content%}

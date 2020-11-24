@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Speed: 
+    {% if speed %}
+    {{ speed  }}
+    {% else %}
+    NOTHING :(
+    {% endif %}
+</h1>
+<h1>correctCharacters: 
+    {% if correctCharacters %}
+    {{ correctCharacters  }}
+    {% else %}
+    NOTHING :(
+    {% endif %}
+</h1>
+<h1>backspaceCount: 
+    {% if backspaceCount %}
+    {{ backspaceCount  }}
+    {% else %}
+    NOTHING :(
+    {% endif %}
+</h1>
+<h1>testDuration: 
+    {% if testDuration %}
+    {{ testDuration  }}
+    {% else %}
+    NOTHING :(
+    {% endif %}
+</h1>
+<h1>accuracy: 
+    {% if accuracy %}
+    {{ accuracy  }}
+    {% else %}
+    NOTHING :(
+    {% endif %}
+</h1>
+{% endblock content %}
