@@ -52,10 +52,15 @@
             legend: { position: 'right' },
             
         };
+
+        var LineChartDiv = document.getElementById('line_chart')
+        if (typeof(LineChartDiv) != 'undefined' && LineChartDiv != null)
+        {
+            var chart = new google.visualization.LineChart(LineChartDiv);
     
-        var chart = new google.visualization.LineChart(document.getElementById('line_chart'));
-    
-        chart.draw(data, options);
+            chart.draw(data, options);
+        }
+
     }
     </script>
 
@@ -66,36 +71,40 @@
 
     function drawChart() {
 
-      var data = new google.visualization.DataTable();
-      data.addColumn('number', 'Test Number');
-      data.addColumn('number', 'Speed');
-      data.addColumn('number', 'Mistakes');
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Test Number');
+        data.addColumn('number', 'Speed');
+        data.addColumn('number', 'Mistakes');
 
-      data.addRows([
+        data.addRows([
         {% if typingtests %}
             {% for row in typingtests %}
                 [{{ loop.index }}, {{ row.speed }}, {{ row.mistakes }}],
             {% endfor %}
         {% endif %}
-      ]);
+        ]);
 
-      var options = {
+        var options = {
         chart: {
-          title: 'Personal typing progress',
-          subtitle: 'in millions of dollars (USD)'
-        },
+            title: 'Personal typing progress',
+            subtitle: 'in millions of dollars (USD)'
+            },
         width: 900,
         height: 500,
         axes: {
-          x: {
-            0: {side: 'top'}
-          }
+            x: {
+                0: {side: 'top'}
+                }
+            }
+        };
+        var chartDiv = document.getElementById('line_top_x')
+        if (typeof(chartDiv) != 'undefined' && chartDiv != null)
+        {
+            var chart = new google.charts.Line(chartDiv);
+
+            chart.draw(data, google.charts.Line.convertOptions(options));
         }
-      };
-
-      var chart = new google.charts.Line(document.getElementById('line_top_x'));
-
-      chart.draw(data, google.charts.Line.convertOptions(options));
+      
     }
   </script>
 

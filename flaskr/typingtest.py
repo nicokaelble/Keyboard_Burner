@@ -32,9 +32,59 @@ def test():
     ).fetchall()
 
     if request.method == 'POST':
-        timerStartigValue = request.form.get('timerSecs')
-        return render_template('/typingtest/test.html', timerStartigValue=timerStartigValue, typingtests=typingtests)
+
+        if request.form.get('timerSecs'):
+            #POST came from settings
+            timerStartigValue = request.form.get('timerSecs')
+
+            return render_template('/typingtest/test.html', timerStartigValue=timerStartigValue, typingtests=typingtests)
+        else:
+            # POST came from test itself and offers form inputs with speed, correct Characters, accuracy...
+            # that should be saved to the database
+            speed = int(request.form['speed'])
+            correctCharacters = int(request.form['correctCharacters'])
+            backspaceCount = int(request.form['backspaceCount'])
+            testDuration = int(request.form['testDuration'])
+            accuracy = float(request.form['accuracy'])
+            round(accuracy, 2)
+
+            db = get_db()
+            # CREATE TABLE testresult(
+            #   testdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            #   userId INTEGER,
+            #   characters INTEGER NOT NULL,
+            #   mistakes INTEGER NOT NULL,
+            #   duration INTEGER NOT NULL,
+            #   speed INTEGER NOT NULL,
+            #   accuracy DOUBLE NOT NULL,
+            #   FOREIGN KEY (userId) REFERENCES user (id)
+            # );    
+            if g.user is not None:
+                #user is logged in
+                userId = g.user['id']
+
+                #insert test result with userId
+                db.execute(
+                'INSERT INTO testresult (userId, characters, mistakes, duration, speed, accuracy)'
+                'VALUES (?, ?, ?, ?, ?, ?)',
+                (userId, correctCharacters, backspaceCount, testDuration, speed, accuracy)
+                )
+                db.commit()
+            else:
+                #no user is logged in
+                print("No user loggid in... write to db")
+                #insert test result without id
+                db.execute(
+                'INSERT INTO testresult (characters, mistakes, duration, speed, accuracy)'
+                'VALUES ( ?, ?, ?, ?, ?)',
+                (correctCharacters, backspaceCount, testDuration, speed, accuracy)
+                )
+                db.commit()
+                print(backspaceCount)
+            return render_template('/typingtest/test.html', typingtests=typingtests, speed=speed, correctCharacters=correctCharacters, 
+                backspaceCount=backspaceCount, testDuration=testDuration, accuracy=accuracy)  
     
+    # Just Get
     return render_template('/typingtest/test.html', typingtests=typingtests)
 
 @bp.route('/result' , methods=('GET', 'POST'))

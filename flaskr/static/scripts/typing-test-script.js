@@ -42,19 +42,24 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 // the following functions handle the start of a typing test if start button is clicked
-// 1. disable textinput, disable start button and start countdown (3...2...1...GO)
+// 1. disable textinput, hide start button and start countdown (3...2...1...GO)
 // 2. count down from 3 
 // 3. enable typing
 // 4. start timer
 
-// 1. Disable textinput, disable start button and start countdown (3...2...1...GO)
-function btnStartTest_Click() {
+// 1. Disable textinput, hide start button and start countdown (3...2...1...GO)
+function btnStart_Click() {
   //disable typing and clear input fielde
   quoteInputElement.value = "";
   quoteInputElement.readOnly = true;
 
-  //disable start button while test is running
-  document.getElementById('btnStartTest').disabled = true;
+  //hide start button while test is running
+  document.getElementById('btnStart').style.display = "none";
+
+  //show pause and reset button
+  document.getElementById('btnPause').removeAttribute("hidden"); 
+  document.getElementById('btnReset').removeAttribute("hidden"); 
+
 
   //start Countdown
   countdownElement.volume = 0.2;
@@ -109,10 +114,18 @@ function getTimerTime() {
   return Math.floor(timerStartValue - timepassedInSec);
 }
 
+
+
 //handle test finished
-
-
 function testFinishedHandler() {
+
+  //hide pause and reset button ()
+  document.getElementById('btnStart').style.display = "block";
+
+  //show pause and reset button
+  document.getElementById('btnPause').hidden = true; 
+  document.getElementById('btnReset').hidden = true; 
+  //show start button
 
   //add correct# entered characters (span class="correct") and add to character count
   characterCount += getCorrectCharacters()
@@ -120,31 +133,21 @@ function testFinishedHandler() {
   //speed = characters per second * 60 = characters per minute
   var speed = (characterCount / timerStartValue) * 60
 
-  // //accuracy = 100 - (use of backspaces / correctCharacters)*100 [%]
+  //accuracy = 100 - (use of backspaces / correctCharacters)*100 [%]
   accuracy = (100 - ((backspaceCounter / characterCount) * 100)).toFixed(2);
 
-  // alert("Test finished!!!" + "\ntotalChorrectCharacters:" + characterCount + "\ncorrectCharacters: " + getCorrectCharacters() + "\nincorrectCharacters: "
-  //   + getIncorrectCharacters() + "\nbackspaceCount: " + backspaceCounter + "\nTestduration: " + timerStartValue + "\nSpeed: " + speed + " characters/min" +
-  //   "accuracy: " + accuracy)
+  //fill hiden input elements with test result values
   document.getElementById('speed').value = speed;
   document.getElementById('correctCharacters').value = characterCount;
   document.getElementById('backspaceCount').value = backspaceCounter;
   document.getElementById('testDuration').value = timerStartValue;
   document.getElementById('accuracy').value = accuracy;
 
-
+  //submit form ("POST" data to /typingtest/result route)
   document.getElementById('testResult').submit();
-  // setTimeout(function () {
-    
-  // }, 5000)
-
-
 }
 
-function btnTest_Click() {
-  //Test correc/incorrect count:
-  alert("correct: " + getCorrectCharacters() + "\nincorrect: " + getIncorrectCharacters());
-}
+
 
 function getCorrectCharacters() {
   //the quote displayed when timer runs out ("unfinished quote")
