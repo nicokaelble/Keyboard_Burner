@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container" style="margin-top: 200px;">
-	<div class="row centered-form">
+	<div class="row justify-content-center">
 		<div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -12,9 +12,13 @@
 					<form role="form" method="post">
 
 						<div class="form-group">
-							<input type="text" name="username" id="username" class="form-control input-sm"
+							<input type="text" name="username" id="username" class="form-control input-sm" autocomplete="off"
 								placeholder="Username" {% if username %} value="{{ username }}" {% endif %}>
 						</div>
+						<!-- Add tooltip -->
+						<script>
+							$('#username').tooltip({'trigger':'focus', 'title': 'Enter a unique Username', 'placement' : 'right'});
+						</script>
 
 						<!-- <div class="form-group">
 							<input type="email" name="email" id="email" class="form-control input-sm"

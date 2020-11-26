@@ -27,37 +27,38 @@
     <link href="../static/style/custom.css" rel="stylesheet">
     <link href="../static/style/typing-test-style.css" rel="stylesheet">
 
-    <!-- Import Google Line Chart insertet here because jinja tags don't work in external .js files-->
+    <!-- Import Google chart loader -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" >
+
+    <!-- Script to define Chart (insertet here because jinja tags don't work in external .js files )-->
+    <script type="text/javascript">
         google.charts.load('current', { 'packages': ['corechart'] });
         google.charts.setOnLoadCallback(drawChart);
-    
+
         function drawChart() {
-    
-        var data = google.visualization.arrayToDataTable([
-        ['Test Nr.', 'Speed', 'Mistakes'],
-            {% if typingtests %}
-                {% for row in typingtests %}
-                    ['Test{{ loop.index }}', {{ row.speed }}, {{ row.mistakes }}],
-                {% endfor %}
-            {% endif %}
-        ]);
-    
-    
+
+            var data = google.visualization.arrayToDataTable([
+                ['Test Nr.', 'Speed', 'Mistakes'],
+                {% if typingtests %}
+                    {% for row in typingtests %}
+                        ['Test{{ loop.index }}', {{ row.speed }}, {{ row.mistakes }}],
+                    {% endfor %}
+                {% endif %}
+                ]);
+
+
         var options = {
-            
+
             title: 'Progress',
             subtitle: 'Speed in correct Characters per minute and accuracy in %',
             legend: { position: 'right' },
-            
+
         };
 
         var LineChartDiv = document.getElementById('line_chart')
-        if (typeof(LineChartDiv) != 'undefined' && LineChartDiv != null)
-        {
+        if (typeof (LineChartDiv) != 'undefined' && LineChartDiv != null) {
             var chart = new google.visualization.LineChart(LineChartDiv);
-    
+
             chart.draw(data, options);
         }
 
@@ -65,80 +66,44 @@
     </script>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['line']});
-      google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-
-        var data = new google.visualization.DataTable();
-        data.addColumn('number', 'Test Number');
-        data.addColumn('number', 'Speed');
-        data.addColumn('number', 'Mistakes');
-
-        data.addRows([
-        {% if typingtests %}
-            {% for row in typingtests %}
-                [{{ loop.index }}, {{ row.speed }}, {{ row.mistakes }}],
-            {% endfor %}
-        {% endif %}
-        ]);
-
-        var options = {
-        chart: {
-            title: 'Personal typing progress',
-            subtitle: 'in millions of dollars (USD)'
-            },
-        width: 900,
-        height: 500,
-        axes: {
-            x: {
-                0: {side: 'top'}
-                }
-            }
-        };
-        var chartDiv = document.getElementById('line_top_x')
-        if (typeof(chartDiv) != 'undefined' && chartDiv != null)
-        {
-            var chart = new google.charts.Line(chartDiv);
-
-            chart.draw(data, google.charts.Line.convertOptions(options));
-        }
-      
-    }
-  </script>
-
 
     <!-- Custom JavaScript -->
     <script type="text/javascript" src="../static/scripts/script.js"></script>
+
 </head>
 
 <body style="background-color: #F9F9F7;" onload="setCurrentPage()">
-    <div id="navbarDiv" style="height: 70px;">
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top" style="height: 70px;" id="navbar">
-            <a class="navbar-brand " href="# "><img src="../static/images/Logo.png" height="50px " alt=" "></a>
-            <button class="navbar-toggler " type="button " data-toggle="collapse " data-target="#navbarCollapse "
-                aria-controls="navbarCollapse " aria-expanded="false " aria-label="Toggle navigation ">
-                <span class="navbar-toggler-icon "></span>
-            </button>
-            <div class="collapse navbar-collapse " id="navbarCollapse ">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item" id="homeNav">
-                        <!-- insert if current = home...-->
-                        <a class="nav-link" href="/home">Home</a>
-                    </li>
-                    <li class="nav-item " id="aboutNav">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-                    <li class="nav-item " id="testNav">
-                        <a class="nav-link" href="{{ url_for('typingtest.test') }}">Typing Test</a>
-                    </li>
-                </ul>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <!-- Keyboard Burner Logo -->
+        <a class="navbar-brand " href="#"><img src="../static/images/Logo.png" height="50px " alt=" "></a>
 
+        <!-- Button to toggle Navbar if screen size is smaller than middle screen-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- the navbar -->
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item" id="homeNav">
+                    <a class="nav-link" href="/home">Home</a>
+                </li>
+                <li class="nav-item " id="aboutNav">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item " id="testNav">
+                    <a class="nav-link" href="{{ url_for('typingtest.test') }}">Typing Test</a>
+                </li>
+            </ul>
+
+            <form class="form-inline my-2 my-md-0">
                 <!-- Login, register, user -->
                 {% if g.user %}
                 <!-- if a user is logged in show user name and logout button -->
-                <div id="userdisplay">
+                <div class="nav-item" id="userdisplay">
                     <p style="color:white; margin-bottom: 0px; margin-right: 20px;">
                         <a class="navbar-brand" style="margin-right: 0px;" href="# ">
                             <img src="../static/images/user-white.png" height="50px " alt=" ">
@@ -151,16 +116,15 @@
                 <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-success" role="button">Logout</a>
                 {% else %}
                 <!-- if not show register and login button -->
-                <form class="form-inline mt-2 mt-md-0" style="margin-bottom: 0px; margin-top: 20px;">
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-success" role="button"
-                        style="margin-right: 10px;">Register</a>
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-success" role="button">Login</a>
-                </form>
-                {% endif %}
 
-            </div>
-        </nav>
-    </div>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-success" role="button"
+                    style="margin-right: 10px;">Register</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-success" role="button">Login</a>
+
+                {% endif %}
+            </form>
+        </div>
+    </nav>
 
     <!-- Flashing based on flashing category, using different style classes for 'error' or 'success' -->
 

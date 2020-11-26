@@ -26,16 +26,18 @@ var characterCount = 0
 //Variable for currently displayed quote length (set by renderNewQuote())
 var currentQuoteLength = 0
 
-//Variable for counting how often the backspace or delet key was used during the typing test
-var backspaceCounter = 0;
+//Variable for counting typing mistakes
+var mistakesCounter = 0;
+
+var timerTime = timerStartValue;
 
 //event listener that calles a function after dom is loaded
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
   timerStartValue = parseInt(timerElement.innerText, 10)
   count = 3;
   characterCount = 0;
   currentQuoteLength = 0;
-  backspaceCounter = 0;
+  mistakesCounter = 0;
   //after everything is set render new quote
   renderNewQuote();
 });
@@ -49,29 +51,36 @@ document.addEventListener("DOMContentLoaded", function(){
 
 // 1. Disable textinput, hide start button and start countdown (3...2...1...GO)
 function btnStart_Click() {
+  renderNewQuote();
+
+  count = 3;
+  characterCount = 0;
+  currentQuoteLength = 0;
+  mistakesCounter = 0;
+
   //disable typing and clear input fielde
   quoteInputElement.value = "";
   quoteInputElement.readOnly = true;
 
-  //hide start button while test is running
-  document.getElementById('btnStart').style.display = "none";
-
-  //show pause and reset button
-  document.getElementById('btnPause').removeAttribute("hidden"); 
-  document.getElementById('btnReset').removeAttribute("hidden"); 
-
+  document.getElementById('btnStart').disabled = true;
 
   //start Countdown
-  countdownElement.volume = 0.2;
-  countdownElement.play();
   intervallCountdown = setInterval(countdown, 1000);
+
+
+   //start Countdown audio (a bit delayed to match timer countdown better)
+   setTimeout(function(){
+    countdownElement.volume = 0.2;
+    countdownElement.play();
+   },200)
+ 
 }
 
-// 2. Count down from 3 (3...2...1...GO)
+// 2. Count down from 3 (3...2...1...)
 function countdown() {
   if (count < 1) {
     clearInterval(intervallCountdown);
-    timerElement.innerText = "GO"
+    timerElement.innerText = timerStartValue - 1;
     enableTyping()
 
   } else {
@@ -82,8 +91,6 @@ function countdown() {
 
 // 3. Enable typing
 function enableTyping() {
-  //add event listener that counts how often backspace or delete was used
-  document.addEventListener("keydown", KeyCheck);
 
   //enable typing
   quoteInputElement.readOnly = false;
@@ -94,12 +101,20 @@ function enableTyping() {
   startTime = new Date()
 
   //start timer updatetes the timer value every sec
-  intervallTimer = setInterval(timer, 1000)
+  intervallTimer = setInterval(startTimer, 1000)
+
+  //hide start button while test is running
+  document.getElementById('btnStart').hidden = true;
+
+  //show pause and reset button
+  document.getElementById('btnPause').removeAttribute("hidden");
+  document.getElementById('btnReset').removeAttribute("hidden");
 }
 
-function timer() {
+function startTimer() {
   timerTime = getTimerTime()
-  if (timerTime == -1) {
+  // console.log(timerTime)
+  if (timerTime < 0) {
     //timer over handle test end
     clearInterval(intervallTimer)
     testFinishedHandler()
@@ -114,8 +129,6 @@ function getTimerTime() {
   return Math.floor(timerStartValue - timepassedInSec);
 }
 
-
-
 //handle test finished
 function testFinishedHandler() {
 
@@ -123,34 +136,48 @@ function testFinishedHandler() {
   document.getElementById('btnStart').style.display = "block";
 
   //show pause and reset button
-  document.getElementById('btnPause').hidden = true; 
-  document.getElementById('btnReset').hidden = true; 
+  document.getElementById('btnPause').hidden = true;
+  document.getElementById('btnReset').hidden = true;
   //show start button
 
   //add correct# entered characters (span class="correct") and add to character count
   characterCount += getCorrectCharacters()
 
   //speed = characters per second * 60 = characters per minute
-  var speed = (characterCount / timerStartValue) * 60
+  speed = (characterCount / timerStartValue) * 60
 
-  //accuracy = 100 - (use of backspaces / correctCharacters)*100 [%]
-  accuracy = (100 - ((backspaceCounter / characterCount) * 100)).toFixed(2);
+  //accuracy in [%] --> make sure not to dived by 0
+  if (characterCount == 0) {
+    accuracy = characterCount.toFixed(2); // 0,00 %
+  }
+  else {
+    accuracy = (100 - ((mistakesCounter / characterCount) * 100)).toFixed(2);
+  }
 
+  // alert(
+  //   "speed: " + speed +
+  //   "\ncorrectCharacters: " + characterCount +
+  //   "\nmistakes: " + mistakesCounter + 
+  //   "\ntimerStartValue: " + timerStartValue +
+  //   "\naccoracy: " + accuracy
+  // )
   //fill hiden input elements with test result values
   document.getElementById('speed').value = speed;
   document.getElementById('correctCharacters').value = characterCount;
-  document.getElementById('backspaceCount').value = backspaceCounter;
+  document.getElementById('mistakes').value = mistakesCounter;
   document.getElementById('testDuration').value = timerStartValue;
   document.getElementById('accuracy').value = accuracy;
 
-  //submit form ("POST" data to /typingtest/result route)
   document.getElementById('testResult').submit();
+  // setTimeout(function () {
+  //   //submit form ("POST" data to /typingtest/result route)
+
+  // }, 5000)
+
 }
 
-
-
 function getCorrectCharacters() {
-  //the quote displayed when timer runs out ("unfinished quote")
+  //the unfinished quote displayed when timer runs out ("unfinished quote")
   const unfinishedQuoteArray = quoteDisplayElement.querySelectorAll('span')
   var correctCharacters = 0;
   //counting all correct characters
@@ -175,21 +202,40 @@ function getIncorrectCharacters() {
   return incorrectCharacters;
 }
 
-//eventhandler on quoteInputElement that counts how often the backspace or delete key was used
-function KeyCheck(event) {
-  const key = event.key; // const {key} = event; ES6+
-  if (key === "Backspace" || key === "Delete") {
-    backspaceCounter++;
-  }
-}
+let latestInputLenght = 0;
 
+//handle input event on quote inupu field
 quoteInputElement.addEventListener('input', () => {
   const arrayQuote = quoteDisplayElement.querySelectorAll('span')
   const arrayValue = quoteInputElement.value.split('')
 
+  //check if mistake were made if something was entered
+  if (arrayValue.length > 0) {
+    currentInputLength = arrayValue.length
+
+    //check for mistake --> mistake if last entered charcter isn't the same as the character at the matching index of quote
+    latestInputCharacter = arrayValue[currentInputLength - 1]
+    matchingQuoteCharacter = arrayQuote[currentInputLength - 1].innerHTML;
+
+    //if mistake --> increase mistake counter
+    //probelem: if there were more than 1 mistake in a row and you click backspace it counts too... even if no new character was added
+    //--> only check for mistake if new character is added (outer if condition)
+    if (latestInputLenght < currentInputLength) {
+      //Character was added
+      if (latestInputCharacter != matchingQuoteCharacter) {
+        //typing mistake was made
+        mistakesCounter++;
+        //console.log("mistakes:" + mistakesCounter)
+      }
+    }
+    latestInputLenght = currentInputLength;
+  }
+
+  //mark correct (green) and incorrect (red) characters by adding and removing style classes 
   let correct = true
   arrayQuote.forEach((characterSpan, index) => {
     const character = arrayValue[index]
+
     if (character == null) {
       characterSpan.classList.remove('correct')
       characterSpan.classList.remove('incorrect')
@@ -200,10 +246,11 @@ quoteInputElement.addEventListener('input', () => {
     } else {
       characterSpan.classList.remove('correct')
       characterSpan.classList.add('incorrect')
+
       correct = false
     }
   })
-
+  //handle quote is correctly entered
   if (correct) {
     // add the length of the entered quote to character count
     characterCount = characterCount + currentQuoteLength;
@@ -217,7 +264,6 @@ function getRandomQuote() {
     .then(response => response.json())
     .then(data => data.content + "#" + data.author)
 }
-
 
 async function renderNewQuote() {
   quoteDisplayElement.innerText = ""
@@ -238,3 +284,61 @@ async function renderNewQuote() {
   authorDisplayElement.innerText = "~ " + author;
   quoteInputElement.value = null;
 }
+
+function btnPause_Click() {
+
+  //disable typing
+  quoteInputElement.readOnly = true;
+  clearInterval(intervallTimer);
+
+  //hide pause button and show continue button
+  document.getElementById('btnPause').hidden = true;
+  document.getElementById('btnContinue').removeAttribute("hidden");
+}
+
+function btnReset_Click() {
+  
+  //stop timer countdown
+  clearInterval(intervallTimer);
+
+  //reset count variables
+  console.log("reset")
+  count = 3;
+  characterCount = 0;
+  currentQuoteLength = 0;
+  mistakesCounter = 0;
+  timerElement.innerText = timerStartValue;
+
+  //show start button
+  document.getElementById('btnStart').removeAttribute("hidden");
+  document.getElementById('btnStart').disabled = false;
+  
+
+  //hide pause and reset button
+  document.getElementById('btnPause').hidden = true;
+  document.getElementById('btnReset').hidden = true;
+  document.getElementById('btnContinue').hidden = true;
+}
+
+function btnContinue_Click() {
+  //enable typing
+  quoteInputElement.readOnly = false;
+  quoteInputElement.focus();
+
+  //timestamp of the start of the typing test because intervall isn't exact
+  startTime = new Date()
+
+  //start timer again
+  intervallTimer = setInterval(startTimer, 1000)
+
+  //show pause button and hide continue button
+  document.getElementById('btnContinue').hidden = true;
+  document.getElementById('btnPause').removeAttribute("hidden");
+}
+
+// using jQuery to catch the event that is fired when modal is closing
+$('#modalDialog').on('hidden.bs.modal', function () {
+  console.log("Modal closed")
+  //refresh page without POST request
+  window.top.location = window.top.location
+})

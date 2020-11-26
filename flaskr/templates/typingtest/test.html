@@ -31,7 +31,10 @@
 
             </div>
             <!-- flex element right -->
-            <div class="p-2" style="width: 120px;">
+            <div class="p-2">
+                <button class="btn btn-primary" style="margin-right: 25px; margin-top: 15px;"
+                    onclick="renderNewQuote()">New Quote</button>
+
             </div>
         </div>
     </div>
@@ -61,49 +64,53 @@
             <div class="col d-flex justify-content-center">
                 <Button id="btnPause" class="btn btn-primary btn-lg" onclick="btnPause_Click()"
                     style="margin-bottom: 20px; margin-top: 20px; margin-right: 30px;" hidden>Pause</Button>
+                <Button id="btnContinue" class="btn btn-primary btn-lg" onclick="btnContinue_Click()"
+                    style="margin-bottom: 20px; margin-top: 20px; margin-right: 30px;" hidden>Continue</Button>
                 <Button id="btnReset" class="btn btn-warning btn-lg" onclick="btnReset_Click()"
-                    style="margin-bottom: 20px; margin-top: 20px;" hidden>Restart</Button>
+                    style="margin-bottom: 20px; margin-top: 20px;" hidden>Reset</Button>
             </div>
         </div>
     </div>
 
     <!-- Button trigger modal -->
-    <button id="showModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalDialog">
+    <button id="showModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalDialog" hidden>
         Launch modal
     </button>
 
     <!-- Modal that shows when test is finished -->
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalDialog">
+
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title">Here is your test result:</h1>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" id="modalBody" style="background: F8F8F8;">
-                    <div class="row justify-content-center" >
+                    <div class="row justify-content-center">
                         <div style="background: rgb(221, 221, 221); border-radius: 10px; padding: 20px;">
                             <p style="font-size: 20px;">
                                 You typed
                                 <span style="font-size: 25px;">
                                     <strong>
-                                        {% if correctCharacters %}{{ correctCharacters  }}{% else %}???{% endif %}
+                                        {% if correctCharacters %}{{ correctCharacters  }}{% else %}0{% endif %}
                                         correct characters
                                     </strong>
                                 </span>
                                 in
                                 <span style="font-size: 25px;">
-                                    <strong>{% if testDuration %}{{ testDuration  }}{% else %}???{% endif %} Seconds.
+                                    <strong>{% if testDuration %}{{ testDuration  }}{% else %}0{% endif %} Seconds.
                                     </strong>
                                 </span>
                             </p>
                             <p style="font-size: 20px;">
-                                This results a typing speed of
+                                This results a
                                 <span style="font-size: 25px; color: orange;">
                                     <strong>
-                                        {% if speed %}{{ speed  }}{% else %}???{% endif %} characters per minute!
+                                        typing speed of {% if speed %}{{ speed  }}{% else %}0{% endif %} characters per
+                                        minute!
                                     </strong>
                                 </span>
                             </p>
@@ -111,30 +118,42 @@
                                 You have made
                                 <span style="font-size: 25px;">
                                     <strong>
-                                        {% if backspaceCount %}{{ backspaceCount  }}{% else %}???{% endif %} typing
+                                        {% if mistakes %}{{ mistakes  }}{% else %}0{% endif %} typing
                                         mistakes
                                     </strong>
                                 </span>
                                 and had an
                                 <span style="font-size: 25px;">
                                     <strong>
-                                        accuracy of {% if accuracy %}{{ accuracy }}{% else %}???{% endif %} %.
+                                        accuracy of {% if accuracy %}{{ accuracy }}{% else %}0{% endif %} %.
                                     </strong>
                                 </span>
                             </p>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary">Continue</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Show Testhistory</button>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Okay</button>
+                    {% if g.user %}
+                    <form action="{{ url_for('auth.profile') }}">
+                        <input class="btn btn-primary" type="submit" value="Show Test-History" />
+                    </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row d-flex justify-content-left" style="padding-left: 20px;">
-        <h1>Leaderboard</h1>
+    <div class="row d-flex justify-content-between bg-dark" style="padding-left: 20px; margin-top: 30px;
+        margin-left: 0px; margin-right: 0px; margin-bottom: 10px;">
+        <div class="p-2">
+            <h1 style="font-size: 60px; color: orange;">Leaderboard</h1>
+        </div>
+        <div class="p-2"></div>
+        <div class="p-2">
+            <h1 style="font-size: 60px; color: orange; margin-right: 20px;">Top 10</h1>
+        </div>
+
     </div>
 
 
@@ -154,6 +173,7 @@
         <tbody>
             {% if typingtests %}
             {% for test in typingtests %}
+            {% if loop.index < 11 %}
             <tr>
                 <th scope="row">{{ loop.index }}</th>
                 <td>
@@ -170,10 +190,20 @@
                 <td>{{ test.accuracy }} %</td>
                 <td>{{ test.testdate }}</td>
             </tr>
+            {% endif %}
+
             {% endfor %}
             {% endif %}
         </tbody>
     </table>
+    <div class="row d-flex justify-content-left" style="padding-left: 20px; margin-top: 10px;
+    margin-left: 0px; margin-right: 0px; margin-bottom: 10px;">
+    <div>
+        <p style="color: white; margin-bottom: 0px;">*The leaderborad only takes the fastest typing speed of each user into account to avoid user repetition</p>
+        <p style="color: white">*Usnknown users are not listed</p>
+    </div>
+      </div>
+   
 </main>
 
 
@@ -182,20 +212,29 @@
 <form action="{{ url_for('typingtest.test') }}" id="testResult" method="post">
     <input type="text" name="speed" id="speed" value="unknown" hidden>
     <input type="text" name="correctCharacters" id="correctCharacters" value="unknown" hidden>
-    <input type="text" name="backspaceCount" id="backspaceCount" value="unknown" hidden>
+    <input type="text" name="mistakes" id="mistakes" value="unknown" hidden>
     <input type="text" name="testDuration" id="testDuration" value="unknown" hidden>
     <input type="text" name="accuracy" id="accuracy" value="unknown" hidden>
 </form>
 
 <!-- JavaScript for typing test -->
 <script type="text/javascript" src="../../static/scripts/typing-test-script.js"></script>
-<script>
-    //check if test was finished and speed exest as jinja varibale
-    {% if speed %}
-    //show modal with testresults
-    document.getElementById('showModal').click();
-    {% endif %}
+
+<script type="text/javascript">
+
+    //check if test was finished and test variables exist
+    document.addEventListener('DOMContentLoaded', function () {
+        {% if speed or accuracy or mistakes or correctCharacters %}
+        //show modal with testresults
+
+        document.getElementById('showModal').click();
+
+        {% endif %}
+
+    }, false);
 
 </script>
+
+
 
 {% endblock content%}
