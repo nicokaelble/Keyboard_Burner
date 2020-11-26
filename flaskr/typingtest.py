@@ -59,16 +59,7 @@ def test():
             
             
             db = get_db()
-            # CREATE TABLE testresult(
-            #   testdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            #   userId INTEGER,
-            #   characters INTEGER NOT NULL,
-            #   mistakes INTEGER NOT NULL,
-            #   duration INTEGER NOT NULL,
-            #   speed INTEGER NOT NULL,
-            #   accuracy DOUBLE NOT NULL,
-            #   FOREIGN KEY (userId) REFERENCES user (id)
-            # );    
+ 
             if g.user is not None:
                 #user is logged in
                 userId = g.user['id']

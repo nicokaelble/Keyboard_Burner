@@ -11,7 +11,6 @@ function setCurrentPage() {
     if (pathname.startsWith("/typingtest")) {
         document.getElementById('testNav').classList.add('active');
     }
-
 }
 
 let showNav = false;
@@ -30,8 +29,5 @@ function toggleNavbar(){
 
         showNav = true;
     }
-        
-    
-
 }
 

@@ -24,15 +24,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
-    @app.route('/base')
-    def base():
-        return render_template('/base.html')
-
+    @app.route('/')
     @app.route('/home')
     def home():
         return render_template('/home.html')
@@ -41,18 +33,7 @@ def create_app(test_config=None):
     def about():
         return render_template('/about.html')
 
-    # @app.route("/test" , methods=['GET', 'POST'])
-    # def test():
-    #     select = request.form.get('comp_select')
-    #     print(select)
-    #     return render_template('/typingtest/test.html', select=select) # just to see what select is
 
-    @app.route('/')
-    def index():
-        secs = []
-        for i in range(30,301,30):
-            secs.append(i)
-        return render_template('/index.html',secs=secs)
 
     # import and inizialize the database
     from . import db

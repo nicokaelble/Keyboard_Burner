@@ -29,7 +29,11 @@ var currentQuoteLength = 0
 //Variable for counting typing mistakes
 var mistakesCounter = 0;
 
+//the current timer time
 var timerTime = timerStartValue;
+
+//the length of the input quote bevor it changend on new input
+var latestInputLenght = 0;
 
 //event listener that calles a function after dom is loaded
 document.addEventListener("DOMContentLoaded", function () {
@@ -44,8 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // the following functions handle the start of a typing test if start button is clicked
-// 1. disable textinput, hide start button and start countdown (3...2...1...GO)
-// 2. count down from 3 
+// 1. disable textinput, hide start button and start countdown 
+// 2. count down (3...2...1...GO)
 // 3. enable typing
 // 4. start timer
 
@@ -110,7 +114,7 @@ function enableTyping() {
   document.getElementById('btnPause').removeAttribute("hidden");
   document.getElementById('btnReset').removeAttribute("hidden");
 }
-
+// 4. start timer
 function startTimer() {
   timerTime = getTimerTime()
   // console.log(timerTime)
@@ -123,6 +127,7 @@ function startTimer() {
   }
 }
 
+//function that retruns the timer time (exactly by comparing dates)
 function getTimerTime() {
   //Timer current value = Timer start value - timepassed
   timepassedInSec = (new Date() - startTime) / 1000;
@@ -145,6 +150,7 @@ function testFinishedHandler() {
 
   //speed = characters per second * 60 = characters per minute
   speed = (characterCount / timerStartValue) * 60
+  speed = Math.round(speed);
 
   //accuracy in [%] --> make sure not to dived by 0
   if (characterCount == 0) {
@@ -154,13 +160,6 @@ function testFinishedHandler() {
     accuracy = (100 - ((mistakesCounter / characterCount) * 100)).toFixed(2);
   }
 
-  // alert(
-  //   "speed: " + speed +
-  //   "\ncorrectCharacters: " + characterCount +
-  //   "\nmistakes: " + mistakesCounter + 
-  //   "\ntimerStartValue: " + timerStartValue +
-  //   "\naccoracy: " + accuracy
-  // )
   //fill hiden input elements with test result values
   document.getElementById('speed').value = speed;
   document.getElementById('correctCharacters').value = characterCount;
@@ -169,13 +168,10 @@ function testFinishedHandler() {
   document.getElementById('accuracy').value = accuracy;
 
   document.getElementById('testResult').submit();
-  // setTimeout(function () {
-  //   //submit form ("POST" data to /typingtest/result route)
-
-  // }, 5000)
 
 }
 
+//function that counts correct characters in input field
 function getCorrectCharacters() {
   //the unfinished quote displayed when timer runs out ("unfinished quote")
   const unfinishedQuoteArray = quoteDisplayElement.querySelectorAll('span')
@@ -189,6 +185,7 @@ function getCorrectCharacters() {
   return correctCharacters;
 }
 
+//function that counts incorrect characters in input field
 function getIncorrectCharacters() {
   //the quote displayed when timer runs out ("unfinished quote")
   const unfinishedQuoteArray = quoteDisplayElement.querySelectorAll('span')
@@ -202,7 +199,7 @@ function getIncorrectCharacters() {
   return incorrectCharacters;
 }
 
-let latestInputLenght = 0;
+
 
 //handle input event on quote inupu field
 quoteInputElement.addEventListener('input', () => {
@@ -259,12 +256,14 @@ quoteInputElement.addEventListener('input', () => {
   }
 })
 
+//function that gets a random quote from http://api.quotable.io/random
 function getRandomQuote() {
   return fetch(RANDOM_QUOTE_API_URL)
     .then(response => response.json())
     .then(data => data.content + "#" + data.author)
 }
 
+//function that renders the quote
 async function renderNewQuote() {
   quoteDisplayElement.innerText = ""
   const quoteString = await getRandomQuote();
@@ -285,6 +284,7 @@ async function renderNewQuote() {
   quoteInputElement.value = null;
 }
 
+//handle pause button click
 function btnPause_Click() {
 
   //disable typing
@@ -296,6 +296,7 @@ function btnPause_Click() {
   document.getElementById('btnContinue').removeAttribute("hidden");
 }
 
+//handle reset button click
 function btnReset_Click() {
   
   //stop timer countdown
@@ -320,6 +321,7 @@ function btnReset_Click() {
   document.getElementById('btnContinue').hidden = true;
 }
 
+//handle continue button click
 function btnContinue_Click() {
   //enable typing
   quoteInputElement.readOnly = false;

@@ -30,6 +30,10 @@
     <!-- Import Google chart loader -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+    <!-- Import font awsome Icon libary -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+     integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
     <!-- Script to define Chart (insertet here because jinja tags don't work in external .js files )-->
     <script type="text/javascript">
         google.charts.load('current', { 'packages': ['corechart'] });
@@ -89,13 +93,13 @@
             <ul class="navbar-nav mr-auto">
 
                 <li class="nav-item" id="homeNav">
-                    <a class="nav-link" href="/home">Home</a>
+                    <a class="nav-link" href="/home"><i class="fas fa-home"></i> Home</a>
                 </li>
                 <li class="nav-item " id="aboutNav">
-                    <a class="nav-link" href="/about">About</a>
+                    <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
                 </li>
                 <li class="nav-item " id="testNav">
-                    <a class="nav-link" href="{{ url_for('typingtest.test') }}">Typing Test</a>
+                    <a class="nav-link" href="{{ url_for('typingtest.test') }}"><i class="fas fa-tachometer-alt"></i> Typing Test</a>
                 </li>
             </ul>
 
