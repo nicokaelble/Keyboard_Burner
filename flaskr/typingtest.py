@@ -15,7 +15,7 @@ def settings():
     if request.method == 'POST':
         return redirect(url_for('typingtest.test'))
     
-    secs = [1,5,    ]
+    secs = [15,    ]
     for i in range(30,301,30):
         secs.append(i)
 
