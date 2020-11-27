@@ -316,28 +316,3 @@ $('#modalDialog').on('hidden.bs.modal', function () {
   //refresh page without POST request
   window.top.location = window.top.location
 })
-
-function generateRandomCharacters(length) {
-  var result           = '';
-  var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-
-  insertSpace = getRandomArbitrary(3,9);
-
-  for ( var i = 0; i < length; i++ ) {
-    if(insertSpace > 0){
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      insertSpace--;
-    }else{
-      result += " ";
-      insertSpace = getRandomArbitrary(3,9);
-    }     
-  }
-  // console.log("Random String: " + result)
-
-  return result;
-}
-
-function getRandomArbitrary(min, max) {
-  return Math.random() * (max - min) + min;
-}
