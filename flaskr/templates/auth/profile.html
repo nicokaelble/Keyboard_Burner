@@ -24,15 +24,15 @@
             </div>
         </div>
 
-        <div class="row justify-content-center" style="margin-bottom: 40px;">
-            <button id="toggleData" class="btn btn-primary btn-lg" onclick="toggleDataTable()">
-                SHOW MORE DETAILS ABOUT MY TYPING-HISTORY</button>
+        <div class="row justify-content-lef" style="margin-bottom: 20px;">
+            <button id="toggleData" class="btn btn-secondary btn-lg" onclick="toggleDataTable()">
+                MORE DETAILS <i id="toggleIcon" class="fas fa-chevron-down"></i> </button>
         </div>
 
 
         <div id="data" class="row" style="margin-bottom: 0px;" hidden>
             <div class="col d-flex justify-content-center" style="padding: 0px;">
-                <table class="table table-dark">
+                <table id="resultHistory" class="table table-dark">
                     <thead>
                         <tr>
                             <th scope="col">Test Nr.</th>
@@ -48,7 +48,8 @@
                         {% if typingtests %}
                         {% for test in typingtests %}
                         <tr>
-                            <th scope="row">{{ loop.index }}</th>
+                            <th scope="row">{{ loop.index }} <button type="button" class="btn btn-link"><i
+                                        id="{{ loop.index }}downloadRow" class="fas fa-download" onclick="downloadResult(this)" ></i></button></th>
                             <td>{{ test.speed }} characters/min</td>
                             <td>{{ test.duration }} sec</td>
                             <td>{{ test.mistakes }} </td>
@@ -65,20 +66,17 @@
         </div>
     </div>
 </main>
-<script>
-    let hidden = true;
-    function toggleDataTable(){
-        if(hidden){
-            document.getElementById('toggleData').innerHTML = "HIDE DETAILS";
-            document.getElementById('data').hidden = false;
-            hidden = false;
-        }else{
-            document.getElementById('toggleData').innerHTML = "SHOW MORE DETAILS ABOUT MY TYPING-HISTORY";
-            document.getElementById('data').hidden = true;
-            hidden = true;
-        }
-        
-    }
-</script>
+
+<!-- hidden input to post testresult data on hidden submit -->
+<form action="{{ url_for('typingtest.result') }}" id="test" method="post">
+    <input type="text" name="speed" id="speed" value="unknown" hidden>
+    <input type="text" name="correctCharacters" id="correctCharacters" value="unknown" hidden>
+    <input type="text" name="mistakes" id="mistakes" value="unknown" hidden>
+    <input type="text" name="testDuration" id="testDuration" value="unknown" hidden>
+    <input type="text" name="accuracy" id="accuracy" value="unknown" hidden>
+    <input type="text" name="date" id="date" value="unknown" hidden>
+</form>
+
+<script type="text/javascript" src="../../static/scripts/auth-profile-script.js"> </script>
 
 {% endblock content %}

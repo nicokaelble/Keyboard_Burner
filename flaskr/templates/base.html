@@ -23,16 +23,20 @@
 
     <title>{% block title %}{% endblock %} - Keyboard Burner</title>
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles -->
     <link href="../static/style/custom.css" rel="stylesheet">
     <link href="../static/style/typing-test-style.css" rel="stylesheet">
 
-    <!-- Import Google chart loader -->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <!-- Import font awsome Icon libary -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-     integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+    <!-- Import html2pdf -->
+    <script src="../../static/scripts/html2pdf.bundle.min.js"></script>
+
+    <!-- Import Google chart loader -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <!-- Script to define Chart (insertet here because jinja tags don't work in external .js files )-->
     <script type="text/javascript">
@@ -44,10 +48,10 @@
             var data = google.visualization.arrayToDataTable([
                 ['Test Nr.', 'Speed', 'Mistakes'],
                 {% if typingtests %}
-                    {% for row in typingtests %}
-                        ['Test{{ loop.index }}', {{ row.speed }}, {{ row.mistakes }}],
-                    {% endfor %}
-                {% endif %}
+        {% for row in typingtests %}
+        ['Test{{ loop.index }}', {{ row.speed }}, {{ row.mistakes }}],
+            {% endfor %}
+        {% endif %}
                 ]);
 
 
@@ -99,7 +103,8 @@
                     <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
                 </li>
                 <li class="nav-item " id="testNav">
-                    <a class="nav-link" href="{{ url_for('typingtest.test') }}"><i class="fas fa-tachometer-alt"></i> Typing Test</a>
+                    <a class="nav-link" href="{{ url_for('typingtest.test') }}"><i class="fas fa-tachometer-alt"></i>
+                        Typing Test</a>
                 </li>
             </ul>
 

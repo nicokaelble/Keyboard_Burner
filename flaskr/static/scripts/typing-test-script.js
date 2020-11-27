@@ -199,8 +199,6 @@ function getIncorrectCharacters() {
   return incorrectCharacters;
 }
 
-
-
 //handle input event on quote inupu field
 quoteInputElement.addEventListener('input', () => {
   const arrayQuote = quoteDisplayElement.querySelectorAll('span')

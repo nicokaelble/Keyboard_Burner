@@ -1,38 +1,52 @@
-{% extends "base.html" %}
-{% block content %}
-<h1>Speed: 
-    {% if speed %}
-    {{ speed  }}
-    {% else %}
-    unknown
-    {% endif %}
-</h1>
-<h1>correctCharacters: 
-    {% if correctCharacters %}
-    {{ correctCharacters  }}
-    {% else %}
-    unknown
-    {% endif %}
-</h1>
-<h1>backspaceCount: 
-    {% if backspaceCount %}
-    {{ backspaceCount  }}
-    {% else %}
-    unknown
-    {% endif %}
-</h1>
-<h1>testDuration: 
-    {% if testDuration %}
-    {{ testDuration  }}
-    {% else %}
-    unknown
-    {% endif %}
-</h1>
-<h1>accuracy: 
-    {% if accuracy %}
-    {{ accuracy  }}
-    {% else %}
-    unknown
-    {% endif %}
-</h1>
-{% endblock content %}
+{% extends "base.html" %} {% block content %}
+<div class="row d-flex justify-content-center" style="margin-top: 30px; margin-bottom: 30px;">
+    <button class="btn btn-success " onclick="generatePDF()"> <i class="fas fa-download"></i> Download as PDF</button>
+</div>
+<div class="row d-flex justify-content-center" style="margin-top: 30px; margin-bottom: 30px;">
+    <!-- typing test result in A4 size: 794 x 1123 -> 96ppi-->
+    <!-- fun fact: div has to be height 1122px because otherwise an empty page is added to pdf download     -->
+    <div id="testResult" style="width: 794px; height: 1122px; margin: auto;
+    padding: 30px; box-shadow: 0 0 30px rgba(0, 0, 0, .15); color: #555; background-color: #6c757d;">
+        <div style="background-color: white; height: 100%; padding: 30px; text-align: center;">
+
+            <h1 style="margin-top: 60px;"><i>Typing Certificate</i></h1>
+
+
+            <h3 style="margin-top: 100px;">Issued to</h3>
+
+
+            <h1 style="font-size: 60px;"><u>Nico Kälble</u></h1>
+
+
+            <h3 style="margin-top: 30px;">for typing random quotes in English</h3>
+
+
+            <h3 style="margin-top: 15px;">with speed of <span style="color: orange;"><b>{% if speed %}{{ speed }}{% else %}0{% endif %} characters per minute</span></b></h3>
+
+            <h3 style="margin-top: 15px;">and an accuracy of <span style="color: orange;"><b>{% if accuracy %}{{ accuracy }}{% else %}0{% endif %}%</b></span>.</h3>
+
+            <h4 style="margin-top: 45px;">Duration: <span><b>{% if testDuration %}{{ testDuration }}{% else %}0{% endif %}s</b></span></h3>
+
+            <h4 style="margin-top: 15px;">Characters: <span><b>{% if correctCharacters %}{{ correctCharacters }}{% else %}0{% endif %}</b></span></h3>
+
+            <h4 style="margin-top: 15px;">Mistakes: <span><b>{% if mistakes %}{{ mistakes }}{% else %}0{% endif %}</b></span></h3>
+
+            <h3 style="margin-top: 45px;">Veryfied by </h3>
+
+            <div class="row d-flex justify-content-center" style="margin-top: 30px;">
+                <div class="bg-dark" style="height: 160px; width: 400px; border-radius: 20px; padding-top: 25px;">
+                    <img src="../../static/images/Logo.png" alt="Keyboard_Burner_Logo" height="100px">
+                </div>
+            </div>
+
+            <h3 style="margin-top: 15px;">on {% if date %}{{ date }}{% else %}unknown{% endif %}</h3>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% endblock content%}

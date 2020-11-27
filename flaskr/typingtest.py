@@ -5,10 +5,26 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from datetime import datetime
+
 from flaskr.db import get_db
 
 # create blueprint named 'auth'
 bp = Blueprint('typingtest', __name__, url_prefix='/typingtest')
+
+@bp.route('/result', methods=('GET', 'POST'))
+def result():
+    if request.method == 'POST':
+        speed = int(request.form['speed'])
+        correctCharacters = int(request.form['correctCharacters'])
+        mistakes = int(request.form['mistakes'])
+        testDuration = int(request.form['testDuration'])
+        accuracy = float(request.form['accuracy'])
+        date = request.form['date']
+
+
+    return render_template('typingtest/result.html', speed=speed, correctCharacters=correctCharacters, 
+                mistakes=mistakes, testDuration=testDuration, accuracy=accuracy, date=date)
 
 @bp.route('/settings', methods=('GET', 'POST'))
 def settings():
@@ -50,12 +66,14 @@ def test():
             testDuration = int(request.form['testDuration'])
             accuracy = float(request.form['accuracy'])
             accuracy = round(accuracy, 2)
-            print("[POST] from /typingtest/test to typingtest/tes" +
-                "\nAccuracy: " + str(accuracy) +
-                "\nSpeed:" + str(speed) +
-                "\nChorrectCharacters: " + str(correctCharacters) +
-                "\nmistakes: " + str(mistakes) +
-                "\ntestDuration: " + str(testDuration))
+
+            dateString = getCurrentDatetimeAsString()
+            # print("[POST] from /typingtest/test to typingtest/tes" +
+            #     "\nAccuracy: " + str(accuracy) +
+            #     "\nSpeed:" + str(speed) +
+            #     "\nChorrectCharacters: " + str(correctCharacters) +
+            #     "\nmistakes: " + str(mistakes) +
+            #     "\ntestDuration: " + str(testDuration))
             
             
             db = get_db()
@@ -64,24 +82,25 @@ def test():
                 #user is logged in
                 userId = g.user['id']
 
-                #insert test result with userId
+                #insert test result WITH userId
                 db.execute(
-                'INSERT INTO testresult (userId, characters, mistakes, duration, speed, accuracy)'
-                'VALUES (?, ?, ?, ?, ?, ?)',
-                (userId, correctCharacters, mistakes, testDuration, speed, accuracy)
+                'INSERT INTO testresult (testdate, userId, characters, mistakes, duration, speed, accuracy)'
+                'VALUES (?, ?, ?, ?, ?, ?, ?)',
+                (dateString, userId, correctCharacters, mistakes, testDuration, speed, accuracy)
                 )
                 db.commit()
             else:
                 #no user is logged in
-                print("No user loggid in... write to db")
-                #insert test result without id
+                # print("No user loggid in... write to db")
+
+                #insert test result WITHOUT id
                 db.execute(
-                'INSERT INTO testresult (characters, mistakes, duration, speed, accuracy)'
-                'VALUES ( ?, ?, ?, ?, ?)',
-                (correctCharacters, mistakes, testDuration, speed, accuracy)
+                'INSERT INTO testresult (testdate, characters, mistakes, duration, speed, accuracy)'
+                'VALUES (?, ?, ?, ?, ?, ?)',
+                (dateString, correctCharacters, mistakes, testDuration, speed, accuracy)
                 )
                 db.commit()
-                print(mistakes)
+                # print(mistakes)
 
             return render_template('/typingtest/test.html', typingtests=typingtests, speed=speed, correctCharacters=correctCharacters, 
                 mistakes=mistakes, testDuration=testDuration, accuracy=accuracy)  
@@ -111,3 +130,19 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+def getCurrentDatetimeAsString():
+
+    now = datetime.now() # current date and time
+
+    year = now.strftime("%Y")
+    month = now.strftime("%B")
+    day = now.strftime("%d")
+    hour = now.strftime("%H")
+    min = now.strftime("%M")
+
+    date = hour + ":" + min + " " + day + "th " + month + " " + year
+
+    print(date)
+
+    return date

@@ -9,7 +9,7 @@ CREATE TABLE user (
 );
 
 CREATE TABLE testresult(
-  testdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  testdate VARCHAR NOT NULL,
   userId INTEGER,
   characters INTEGER NOT NULL,
   mistakes INTEGER NOT NULL,

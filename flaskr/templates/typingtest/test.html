@@ -12,8 +12,8 @@
             <!-- flex element left-->
             <div class="p-2" style="width: 120px;">
                 <form action="/typingtest/settings" style="margin-left: 25px; margin-top: 15px;">
-                    <button class="btn btn-primary" style="width: 105px;"
-                    type="submit"><i class="fas fa-cog"></i>  Settings</button>
+                    <button class="btn btn-primary" style="width: 105px;" type="submit"><i class="fas fa-cog"></i>
+                        Settings</button>
                 </form>
 
             </div>
@@ -34,8 +34,7 @@
             <!-- flex element right -->
             <div class="p-2">
                 <button class="btn btn-primary" style="margin-right: 25px; margin-top: 15px;"
-                    onclick="renderNewQuote()"><i class="fas fa-redo"></i>  New Quote</button>
-
+                    onclick="renderNewQuote()"><i class="fas fa-redo"></i> New Quote</button>
             </div>
         </div>
     </div>
@@ -58,17 +57,19 @@
         <div class="row">
             <div class="col d-flex justify-content-center">
                 <Button id="btnStart" class="btn btn-success btn-lg" onclick="btnStart_Click()"
-                    style="margin-bottom: 20px; margin-top: 20px;"><i class="fas fa-play"></i>  Start Test</Button>
+                    style="margin-bottom: 20px; margin-top: 20px;"><i class="fas fa-play"></i> Start Test</Button>
             </div>
         </div>
         <div class="row">
             <div class="col d-flex justify-content-center">
                 <Button id="btnPause" class="btn btn-primary btn-lg" onclick="btnPause_Click()"
-                    style="margin-bottom: 20px; margin-top: 20px; margin-right: 30px;" hidden><i class="fas fa-pause"></i>  Pause</Button>
+                    style="margin-bottom: 20px; margin-top: 20px; margin-right: 30px;" hidden><i
+                        class="fas fa-pause"></i> Pause</Button>
                 <Button id="btnContinue" class="btn btn-primary btn-lg" onclick="btnContinue_Click()"
-                    style="margin-bottom: 20px; margin-top: 20px; margin-right: 30px;" hidden><i class="fas fa-play"></i>  Continue</Button>
+                    style="margin-bottom: 20px; margin-top: 20px; margin-right: 30px;" hidden><i
+                        class="fas fa-play"></i> Continue</Button>
                 <Button id="btnReset" class="btn btn-warning btn-lg" onclick="btnReset_Click()"
-                    style="margin-bottom: 20px; margin-top: 20px;" hidden><i class="fas fa-redo"></i>  Reset</Button>
+                    style="margin-bottom: 20px; margin-top: 20px;" hidden><i class="fas fa-redo"></i> Reset</Button>
             </div>
         </div>
     </div>
@@ -137,7 +138,8 @@
                     <button type="button" class="btn btn-success" data-dismiss="modal">Okay</button>
                     {% if g.user %}
                     <form action="{{ url_for('auth.profile') }}">
-                        <input class="btn btn-primary" type="submit" value="Show Test-History" />
+                        <button class="btn btn-primary" type="submit"> Show
+                            Test-History</button>
                     </form>
                     {% endif %}
                 </div>
@@ -199,17 +201,18 @@
     </table>
     <div class="row d-flex justify-content-left" style="padding-left: 20px; margin-top: 10px;
     margin-left: 0px; margin-right: 0px; margin-bottom: 10px;">
-    <div>
-        <p style="color: white; margin-bottom: 0px;">*The leaderborad only takes the fastest typing speed of each user into account to avoid user repetition</p>
-        <p style="color: white">*Usnknown users are not listed</p>
+        <div>
+            <p style="color: white; margin-bottom: 0px;">*The leaderboard only takes the fastest typing speed of each
+                user into account to avoid user repetition</p>
+            <p style="color: white">*Unknown users are not listed</p>
+        </div>
     </div>
-      </div>
-   
+
 </main>
 
 
 
-<!-- hidden input to post data to testresult data on hidden submit -->
+<!-- hidden input to post testresult data on hidden submit -->
 <form action="{{ url_for('typingtest.test') }}" id="testResult" method="post">
     <input type="text" name="speed" id="speed" value="unknown" hidden>
     <input type="text" name="correctCharacters" id="correctCharacters" value="unknown" hidden>
@@ -218,12 +221,14 @@
     <input type="text" name="accuracy" id="accuracy" value="unknown" hidden>
 </form>
 
+
+
 <!-- JavaScript for typing test -->
 <script type="text/javascript" src="../../static/scripts/typing-test-script.js"></script>
 
 <script type="text/javascript">
 
-    //check if test was finished and test variables exist
+    //check if test was finished and test variables exist when page is loaded
     document.addEventListener('DOMContentLoaded', function () {
         {% if speed or accuracy or mistakes or correctCharacters %}
         //show modal with testresults

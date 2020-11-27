@@ -30,4 +30,21 @@ function toggleNavbar(){
         showNav = true;
     }
 }
+//using html2pdf to generate and download test result
+function generatePDF() {
+    // Choose the element that our invoice is rendered in.
+    const element = document.getElementById("testResult");
+    // Choose the element and save the PDF for our user.
+    html2pdf()
+        .set({ html2canvas: { scale: 4 } })
+        .from(element)
+        .save();
+}
+
+//Format Date to look nice
+//2020-11-25 15:30:24    -->  15:30 25th November 2020
+function formatDate(uglyDate){
+    
+}
+
 
