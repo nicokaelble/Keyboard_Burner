@@ -254,60 +254,7 @@ quoteInputElement.addEventListener('input', () => {
   }
 })
 
-//function that gets a random quote from http://api.quotable.io/random
-function getRandomQuote() {
-  return fetch(RANDOM_QUOTE_API_URL)
-    .then(response => response.json())
-    .then(data => data.content + "#" + data.author)
-}
 
-//function that renders the new text to display
-async function renderNewText() {
-  quoteDisplayElement.innerHTML = "";
-
-  testType = document.getElementById('testType').innerHTML;
-
-  console.log("testType = " + testType)
-  // Type:
-  // value="1"       > selected funny quotes
-  // value="2"       > Random words
-  // value="3"       > Random characters 
-  // value="4"       > Random quotes   
-
-  if(testType == '3'){
-    authorDisplayElement.innerText = "~ R. Andom";
-
-    const randomString = await generateRandomCharacters(65);
-
-    randomString.split('').forEach(character => {
-      const characterSpan = document.createElement('span')
-      characterSpan.innerText = character
-      quoteDisplayElement.appendChild(characterSpan)
-    })
-    quoteInputElement.value = null;
-  }
-
-  //render random quote
-  if(testType == '4'){
-    quoteDisplayElement.innerText = ""
-    const quoteString = await getRandomQuote();
-
-    //quoteString format <the quote>#<the autor>
-    var quoteList = quoteString.split("#")
-    quote = quoteList[0];
-    author = quoteList[1];
-    currentTextLength = quote.length;
-  
-    quote.split('').forEach(character => {
-      const characterSpan = document.createElement('span')
-      characterSpan.innerText = character
-      quoteDisplayElement.appendChild(characterSpan)
-    })
-    authorDisplayElement.innerText = "~ " + author;
-    quoteInputElement.value = null;
-  }
-
-}
 
 //handle pause button click
 function btnPause_Click() {
