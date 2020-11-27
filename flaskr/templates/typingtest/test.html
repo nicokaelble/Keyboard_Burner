@@ -2,6 +2,7 @@
 
 
 
+
 <main role="main" class="container" onload="setup()"
     style="background-color: #6c757d; border-radius: 15px; padding: 15px; margin-top: 20px;">
     <audio controls style="visibility: hidden; width: 0px; height: 0px;" id="countdownSound">
@@ -34,7 +35,12 @@
             <!-- flex element right -->
             <div class="p-2">
                 <button class="btn btn-primary" style="margin-right: 25px; margin-top: 15px;"
-                    onclick="renderNewText()"><i class="fas fa-redo"></i> New Quote</button>
+                    onclick="renderNewText()"><i class="fas fa-redo"></i> New 
+                    {% if type == '4' %}
+                        Quote
+                    {% else %}
+                        Text
+                    {% endif %}</button>
             </div>
         </div>
     </div>
@@ -228,7 +234,7 @@
     value="3"       > Random characters 
     value="4"       > Random quotes   -->
 
-<p id="testType" hidden>{% if type %}{{ type }}{% else %}3{% endif %}</p>
+<p id="testType" hidden>{% if type %}{{ type }}{% else %}4{% endif %}</p>
 
 
 <!-- JavaScript for typing test -->

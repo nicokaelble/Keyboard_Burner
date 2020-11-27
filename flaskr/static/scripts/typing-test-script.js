@@ -249,7 +249,7 @@ quoteInputElement.addEventListener('input', () => {
   if (correct) {
     // add the length of the entered quote to character count
     characterCount = characterCount + currentTextLength;
-    console.log("Character count after quote correct: " + characterCount);
+    // console.log("Character count after quote correct: " + characterCount);
     renderNewText()
   }
 })
@@ -261,9 +261,12 @@ function getRandomQuote() {
     .then(data => data.content + "#" + data.author)
 }
 
-//function that renders the quote
+//function that renders the new text to display
 async function renderNewText() {
+  quoteDisplayElement.innerHTML = "";
+
   testType = document.getElementById('testType').innerHTML;
+
   console.log("testType = " + testType)
   // Type:
   // value="1"       > selected funny quotes
@@ -272,9 +275,9 @@ async function renderNewText() {
   // value="4"       > Random quotes   
 
   if(testType == '3'){
-    authorDisplayElement.innerText = "";
+    authorDisplayElement.innerText = "~ R. Andom";
 
-    const randomString = await generateRandomCharacters(350);
+    const randomString = await generateRandomCharacters(65);
 
     randomString.split('').forEach(character => {
       const characterSpan = document.createElement('span')
@@ -291,8 +294,6 @@ async function renderNewText() {
 
     //quoteString format <the quote>#<the autor>
     var quoteList = quoteString.split("#")
-  
-  
     quote = quoteList[0];
     author = quoteList[1];
     currentTextLength = quote.length;
@@ -385,7 +386,7 @@ function generateRandomCharacters(length) {
       insertSpace = getRandomArbitrary(3,9);
     }     
   }
-  console.log("Random String: " + result)
+  // console.log("Random String: " + result)
 
   return result;
 }
