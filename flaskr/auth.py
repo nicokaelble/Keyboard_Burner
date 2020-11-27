@@ -120,7 +120,7 @@ def profile():
     'SELECT *' 
     ' FROM testresult t LEFT JOIN user u ON t.userId = u.id'
     ' WHERE u.id = ?'
-    ' ORDER BY t.testdate ASC',
+    ' ORDER BY t.timestamp ASC',
     (userId,)
     ).fetchall()
 
