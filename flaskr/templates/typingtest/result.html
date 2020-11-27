@@ -2,10 +2,12 @@
 
 <div class="row d-flex justify-content-center" style="margin-top: 30px; margin-bottom: 30px;">
     <form action="{{ url_for('auth.profile') }}">
-        <button class="btn btn-primary" style="margin-right: 50px;" type="submit"> <i class="fas fa-arrow-left"></i> Back to Profile</button>
+        <button class="btn btn-primary" style="margin-right: 50px;" type="submit"> <i class="fas fa-arrow-left"></i>
+            Back to Profile</button>
     </form>
-    
-    <button class="btn btn-success " onclick="generatePDF()" style="height: 38px;"> <i class="fas fa-download"></i> Download as PDF</button>
+
+    <button class="btn btn-success " onclick="generatePDF()" style="height: 38px;"> <i class="fas fa-download"></i>
+        Download as PDF</button>
 </div>
 
 <div class="row d-flex justify-content-center" style="margin-top: 30px; margin-bottom: 30px;">
@@ -21,7 +23,7 @@
             <h3 style="margin-top: 100px;">Issued to</h3>
 
 
-            <h1 style="font-size: 60px;"><u>Nico Kälble</u></h1>
+            <h1 style="font-size: 60px;"><u>{{ g.user['username'] }}</u></h1>
 
 
             <h3 style="margin-top: 30px;">for typing random quotes in English</h3>

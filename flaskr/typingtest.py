@@ -144,6 +144,6 @@ def getCurrentDatetimeAsString():
 
     date = hour + ":" + min + " " + day + "th " + month + " " + year
 
-    print(date)
+    #print(date)
 
     return date
