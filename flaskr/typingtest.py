@@ -55,8 +55,9 @@ def test():
         if request.form.get('timerSecs'):
             #POST came from settings
             timerStartigValue = request.form.get('timerSecs')
+            testType = request.form.get('type')
 
-            return render_template('/typingtest/test.html', timerStartigValue=timerStartigValue, typingtests=typingtests)
+            return render_template('/typingtest/test.html', timerStartigValue=timerStartigValue, typingtests=typingtests, type=testType)
         else:
             # POST came from test itself and offers form inputs with speed, correct Characters, accuracy...
             # that should be saved to the database

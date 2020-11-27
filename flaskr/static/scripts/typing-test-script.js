@@ -23,8 +23,8 @@ var count = 3
 //character counter for measuring typing speed
 var characterCount = 0
 
-//Variable for currently displayed quote length (set by renderNewQuote())
-var currentQuoteLength = 0
+//Variable for currently displayed quote length (set by renderNewText())
+var currentTextLength = 0
 
 //Variable for counting typing mistakes
 var mistakesCounter = 0;
@@ -40,10 +40,10 @@ document.addEventListener("DOMContentLoaded", function () {
   timerStartValue = parseInt(timerElement.innerText, 10)
   count = 3;
   characterCount = 0;
-  currentQuoteLength = 0;
+  currentTextLength = 0;
   mistakesCounter = 0;
   //after everything is set render new quote
-  renderNewQuote();
+  renderNewText();
 });
 
 
@@ -55,11 +55,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 1. Disable textinput, hide start button and start countdown (3...2...1...GO)
 function btnStart_Click() {
-  renderNewQuote();
+  renderNewText();
 
   count = 3;
   characterCount = 0;
-  currentQuoteLength = 0;
+  currentTextLength = 0;
   mistakesCounter = 0;
 
   //disable typing and clear input fielde
@@ -248,9 +248,9 @@ quoteInputElement.addEventListener('input', () => {
   //handle quote is correctly entered
   if (correct) {
     // add the length of the entered quote to character count
-    characterCount = characterCount + currentQuoteLength;
+    characterCount = characterCount + currentTextLength;
     console.log("Character count after quote correct: " + characterCount);
-    renderNewQuote()
+    renderNewText()
   }
 })
 
@@ -262,24 +262,50 @@ function getRandomQuote() {
 }
 
 //function that renders the quote
-async function renderNewQuote() {
-  quoteDisplayElement.innerText = ""
-  const quoteString = await getRandomQuote();
-  //quoteString format <the quote>#<the autor>
-  var quoteList = quoteString.split("#")
+async function renderNewText() {
+  testType = document.getElementById('testType').innerHTML;
+  console.log("testType = " + testType)
+  // Type:
+  // value="1"       > selected funny quotes
+  // value="2"       > Random words
+  // value="3"       > Random characters 
+  // value="4"       > Random quotes   
 
+  if(testType == '3'){
+    authorDisplayElement.innerText = "";
 
-  quote = quoteList[0];
-  author = quoteList[1];
-  currentQuoteLength = quote.length;
+    const randomString = await generateRandomCharacters(350);
 
-  quote.split('').forEach(character => {
-    const characterSpan = document.createElement('span')
-    characterSpan.innerText = character
-    quoteDisplayElement.appendChild(characterSpan)
-  })
-  authorDisplayElement.innerText = "~ " + author;
-  quoteInputElement.value = null;
+    randomString.split('').forEach(character => {
+      const characterSpan = document.createElement('span')
+      characterSpan.innerText = character
+      quoteDisplayElement.appendChild(characterSpan)
+    })
+    quoteInputElement.value = null;
+  }
+
+  //render random quote
+  if(testType == '4'){
+    quoteDisplayElement.innerText = ""
+    const quoteString = await getRandomQuote();
+
+    //quoteString format <the quote>#<the autor>
+    var quoteList = quoteString.split("#")
+  
+  
+    quote = quoteList[0];
+    author = quoteList[1];
+    currentTextLength = quote.length;
+  
+    quote.split('').forEach(character => {
+      const characterSpan = document.createElement('span')
+      characterSpan.innerText = character
+      quoteDisplayElement.appendChild(characterSpan)
+    })
+    authorDisplayElement.innerText = "~ " + author;
+    quoteInputElement.value = null;
+  }
+
 }
 
 //handle pause button click
@@ -304,7 +330,7 @@ function btnReset_Click() {
   console.log("reset")
   count = 3;
   characterCount = 0;
-  currentQuoteLength = 0;
+  currentTextLength = 0;
   mistakesCounter = 0;
   timerElement.innerText = timerStartValue;
 
@@ -342,3 +368,28 @@ $('#modalDialog').on('hidden.bs.modal', function () {
   //refresh page without POST request
   window.top.location = window.top.location
 })
+
+function generateRandomCharacters(length) {
+  var result           = '';
+  var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+
+  insertSpace = getRandomArbitrary(3,9);
+
+  for ( var i = 0; i < length; i++ ) {
+    if(insertSpace > 0){
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      insertSpace--;
+    }else{
+      result += " ";
+      insertSpace = getRandomArbitrary(3,9);
+    }     
+  }
+  console.log("Random String: " + result)
+
+  return result;
+}
+
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}

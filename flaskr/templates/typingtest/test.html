@@ -34,7 +34,7 @@
             <!-- flex element right -->
             <div class="p-2">
                 <button class="btn btn-primary" style="margin-right: 25px; margin-top: 15px;"
-                    onclick="renderNewQuote()"><i class="fas fa-redo"></i> New Quote</button>
+                    onclick="renderNewText()"><i class="fas fa-redo"></i> New Quote</button>
             </div>
         </div>
     </div>
@@ -221,6 +221,14 @@
     <input type="text" name="accuracy" id="accuracy" value="unknown" hidden>
 </form>
 
+<!-- hidden paragraph for testtype:
+    Type:
+    value="1"       > selected funny quotes
+    value="2"       > Random words
+    value="3"       > Random characters 
+    value="4"       > Random quotes   -->
+
+<p id="testType" hidden>{% if type %}{{ type }}{% else %}3{% endif %}</p>
 
 
 <!-- JavaScript for typing test -->
