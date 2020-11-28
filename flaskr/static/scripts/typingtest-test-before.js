@@ -1,3 +1,28 @@
+//Variable for currently displayed quote length (set by renderNewText())
+var currentTextLength = 0
+
+// the time the test started
+var startTime
+
+
+//intervall for timer (60....59...58...     ....0 --> test finished)
+var intervallTimer
+
+//intervall for countdown (3...2...1...GO)
+var intervallCountdown;
+
+//start value for countdown (3...2...1...)
+var count = 3
+
+//character counter for measuring typing speed
+var characterCount = 0
+
+//Variable for counting typing mistakes
+var mistakesCounter = 0;
+
+//the length of the input quote bevor it changend on new input
+var latestInputLenght = 0;
+ 
  //function that gets a random quote from http://api.quotable.io/random
  function getRandomQuote() {
     return fetch(RANDOM_QUOTE_API_URL)
@@ -10,8 +35,6 @@ async function renderNewText() {
     quoteDisplayElement.innerHTML = "";
 
     testType = document.getElementById('testType').innerHTML;
-
-    console.log("testType = " + testType)
     // Type:
     // value="1"       > selected funny quotes
     // value="2"       > Random words
@@ -24,6 +47,8 @@ async function renderNewText() {
         authorDisplayElement.innerHTML = "~ " + funnyQuote[1];
 
         funnyQuoteString = funnyQuote[0];
+        currentTextLength = funnyQuoteString.length;
+        console.log("renderNewText() --> type 1 (funny quotes)\nCurrentTextLength: " + currentTextLength + "\ncurrentCorrectCharacters: " + characterCount)
 
         funnyQuoteString.split('').forEach(character => {
             const characterSpan = document.createElement('span')
@@ -38,6 +63,8 @@ async function renderNewText() {
         authorDisplayElement.innerText = "~ R. Andom";
 
         const randomString = generateRandomCharacters(65);
+        currentTextLength = randomString.length;
+        console.log("renderNewText() --> type 3 (random characters)\nCurrentTextLength: " + currentTextLength + "\ncurrentCorrectCharacters: " + characterCount)
 
         randomString.split('').forEach(character => {
             const characterSpan = document.createElement('span')
@@ -57,6 +84,7 @@ async function renderNewText() {
         quote = quoteList[0];
         author = quoteList[1];
         currentTextLength = quote.length;
+        console.log("renderNewText() --> type 4 (random quote)\nCurrentTextLength: " + currentTextLength + "\ncurrentCorrectCharacters: " + characterCount)
 
         quote.split('').forEach(character => {
             const characterSpan = document.createElement('span')
@@ -112,13 +140,13 @@ function getFunnyQuote(){
         ["War is God’s way of teaching Americans geography.","Ambrose Bierce"],
         ["It would be nice to spend billions on schools and roads, but right now that money is desperately needed for political ads.","Andy Borowitz"],
         ["A government that robs Peter to pay Paul can always depend on the support of Paul.","Shaw Quotes"],
-        ["It’s just a job. Grass grows, birds fly, waves pound the sand. I beat people up.","Muhammad Ali"],
+        ["It's just a job. Grass grows, birds fly, waves pound the sand. I beat people up.","Muhammad Ali"],
         ["God did not intend religion to be an exercise club.","Naguib Mahfouz"],
         ["Man has his will, but woman has her way.","Oliver Wendell Holmes Sr."],
         ["Gravitation can not be held responsible for people falling in love.","Albert Einstein"],
         ["A good speech should be like a woman's skirt: long enough to cover the subject and short enough to create interest.","Winston Churchill"],
         ["I am so clever that sometimes I don’t understand a single word of what I am saying."," Oscar Wilde"],
-        ["I’m such a good lover because I practice a lot on my own.","Woody Allen"]
+        ["I'm such a good lover because I practice a lot on my own.","Woody Allen"]
 
     ]
     return funnyQuotes[Math.floor((Math.random()*funnyQuotes.length))]; //return ["Quote","Author"]

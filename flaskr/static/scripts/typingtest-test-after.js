@@ -6,34 +6,11 @@ const quoteInputElement = document.getElementById('quoteInput')
 const timerElement = document.getElementById('timer')
 const countdownElement = document.getElementById('countdownSound')
 
-// the time the test started
-var startTime
 // the timer startig value passed by the setting page (for example '60' [s])
 var timerStartValue = parseInt(timerElement.innerText, 10)
 
-//intervall for timer (60....59...58...     ....0 --> test finished)
-var intervallTimer
-
-//intervall for countdown (3...2...1...GO)
-var intervallCountdown;
-
-//start value for countdown (3...2...1...)
-var count = 3
-
-//character counter for measuring typing speed
-var characterCount = 0
-
-//Variable for currently displayed quote length (set by renderNewText())
-var currentTextLength = 0
-
-//Variable for counting typing mistakes
-var mistakesCounter = 0;
-
 //the current timer time
 var timerTime = timerStartValue;
-
-//the length of the input quote bevor it changend on new input
-var latestInputLenght = 0;
 
 //event listener that calles a function after dom is loaded
 document.addEventListener("DOMContentLoaded", function () {
@@ -59,7 +36,6 @@ function btnStart_Click() {
 
   count = 3;
   characterCount = 0;
-  currentTextLength = 0;
   mistakesCounter = 0;
 
   //disable typing and clear input fielde
@@ -210,7 +186,13 @@ quoteInputElement.addEventListener('input', () => {
 
     //check for mistake --> mistake if last entered charcter isn't the same as the character at the matching index of quote
     latestInputCharacter = arrayValue[currentInputLength - 1]
-    matchingQuoteCharacter = arrayQuote[currentInputLength - 1].innerHTML;
+    if(currentInputLength > arrayQuote.length){
+      //add mistake for each added input character that increases the input length over the quote length by comparing it with a string that always returns false
+      matchingQuoteCharacter = "§2" 
+    }else{
+      matchingQuoteCharacter = arrayQuote[currentInputLength - 1].innerHTML;
+    }
+    
 
     //if mistake --> increase mistake counter
     //probelem: if there were more than 1 mistake in a row and you click backspace it counts too... even if no new character was added
@@ -247,8 +229,14 @@ quoteInputElement.addEventListener('input', () => {
   })
   //handle quote is correctly entered
   if (correct) {
+
+    console.log("Inptut event listener: CORRECT --> BEVOR increase count:\nCurrentTextLength: " + currentTextLength + "\ncurrentCorrectCharacters: " + characterCount)
+
     // add the length of the entered quote to character count
-    characterCount = characterCount + currentTextLength;
+    characterCount += currentTextLength;
+
+    console.log("Inptut event listener: CORRECT --> AFTER increase count:\nCurrentTextLength: " + currentTextLength + "\ncurrentCorrectCharacters: " + characterCount)
+
     // console.log("Character count after quote correct: " + characterCount);
     renderNewText()
   }
