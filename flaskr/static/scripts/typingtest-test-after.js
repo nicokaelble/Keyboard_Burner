@@ -12,18 +12,6 @@ var timerStartValue = parseInt(timerElement.innerText, 10)
 //the current timer time
 var timerTime = timerStartValue;
 
-//event listener that calles a function after dom is loaded
-document.addEventListener("DOMContentLoaded", function () {
-  timerStartValue = parseInt(timerElement.innerText, 10)
-  count = 3;
-  characterCount = 0;
-  currentTextLength = 0;
-  mistakesCounter = 0;
-  //after everything is set render new quote
-  renderNewText();
-});
-
-
 // the following functions handle the start of a typing test if start button is clicked
 // 1. disable textinput, hide start button and start countdown 
 // 2. count down (3...2...1...GO)
