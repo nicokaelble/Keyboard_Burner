@@ -1,89 +1,6 @@
 {% extends "base.html" %} {% block content %}
 
-<script type="text/javascript">
-
-    //function that gets a random quote from http://api.quotable.io/random
-    function getRandomQuote() {
-        return fetch(RANDOM_QUOTE_API_URL)
-            .then(response => response.json())
-            .then(data => data.content + "#" + data.author)
-    }
-
-    //function that renders the new text to display
-    async function renderNewText() {
-        quoteDisplayElement.innerHTML = "";
-
-        testType = document.getElementById('testType').innerHTML;
-
-        console.log("testType = " + testType)
-        // Type:
-        // value="1"       > selected funny quotes
-        // value="2"       > Random words
-        // value="3"       > Random characters 
-        // value="4"       > Random quotes   
-
-        if (testType == '3') {
-            authorDisplayElement.innerText = "~ R. Andom";
-
-            const randomString = generateRandomCharacters(65);
-
-            randomString.split('').forEach(character => {
-                const characterSpan = document.createElement('span')
-                characterSpan.innerText = character
-                quoteDisplayElement.appendChild(characterSpan)
-            })
-            quoteInputElement.value = null;
-        }
-
-        //render random quote
-        if (testType == '4') {
-            quoteDisplayElement.innerText = ""
-            const quoteString = await getRandomQuote();
-
-            //quoteString format <the quote>#<the autor>
-            var quoteList = quoteString.split("#")
-            quote = quoteList[0];
-            author = quoteList[1];
-            currentTextLength = quote.length;
-
-            quote.split('').forEach(character => {
-                const characterSpan = document.createElement('span')
-                characterSpan.innerText = character
-                quoteDisplayElement.appendChild(characterSpan)
-            })
-            authorDisplayElement.innerText = "~ " + author;
-            quoteInputElement.value = null;
-        }
-
-    }
-
-    function generateRandomCharacters(length) {
-        var result = '';
-        var characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-
-        insertSpace = getRandomArbitrary(3, 9);
-
-        for (var i = 0; i < length; i++) {
-            if (insertSpace > 0) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
-                insertSpace--;
-            } else {
-                result += " ";
-                insertSpace = getRandomArbitrary(3, 9);
-            }
-        }
-        // console.log("Random String: " + result)
-
-        return result;
-    }
-
-    function getRandomArbitrary(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
-</script>
-
+<script type="text/javascript" src="../../static/scripts/typingtest-test-before.js"></script>
 
 <main role="main" class="container" onload="setup()"
     style="background-color: #6c757d; border-radius: 15px; padding: 15px; margin-top: 20px;">
@@ -131,13 +48,18 @@
 
 
     <div class="container">
-        <div class="row">
-            <div class="col"
-                style="margin-bottom: 30px; height: 300px; margin-left: 45px; margin-right: 45px; background-color: #F9F9F7; padding: 15px; border-radius: 15px;">
-                <h3 class="quote-display" id="quoteDisplay">
-                </h3>
+        <div class="row" style="height: 300px; margin-bottom: 30px; position: relative; ">
+            <div style=" height: 100%; margin-left: 45px; width: 100%; margin-right: 45px; background-color: #F9F9F7; padding: 15px;
+            border-radius: 15px;">
+                <div class="d-flex justify-content-end">
+                    <a style="margin-right: 0px;" href="#" onclick="renderNewText()"><i
+                            class="fas fa-sync-alt fa-lg"></i></a>
+                </div>
+                <h3 class="quote-display" id="quoteDisplay"></h3>
                 <p class="author-display" style="text-align: right; margin-right: 50px;" id="authorDisplay"></p>
+
             </div>
+
         </div>
         <div class="row" style="padding-left: 45px; padding-right: 45px;">
             <textarea class="quote-input form-control" id="quoteInput" rows="1"></textarea>
@@ -152,10 +74,12 @@
             <div class="col d-flex justify-content-center">
                 <Button id="btnPause" class="btn btn-primary btn-lg" onclick="btnPause_Click()"
                     style="margin-bottom: 20px; margin-top: 20px; margin-right: 30px;" hidden><i
-                        class="fas fa-pause"></i> Pause</Button>
+                        class="fas fa-pause"></i>
+                    Pause</Button>
                 <Button id="btnContinue" class="btn btn-primary btn-lg" onclick="btnContinue_Click()"
                     style="margin-bottom: 20px; margin-top: 20px; margin-right: 30px;" hidden><i
-                        class="fas fa-play"></i> Continue</Button>
+                        class="fas fa-play"></i>
+                    Continue</Button>
                 <Button id="btnReset" class="btn btn-warning btn-lg" onclick="btnReset_Click()"
                     style="margin-bottom: 20px; margin-top: 20px;" hidden><i class="fas fa-redo"></i> Reset</Button>
             </div>
@@ -311,16 +235,16 @@
 
 <!-- hidden paragraph for testtype:
     Type:
-    value="1"       > selected funny quotes
+    value="1"       > selected funny quotes (deafault)
     value="2"       > Random words
     value="3"       > Random characters 
     value="4"       > Random quotes   -->
 
-<p id="testType" hidden>{% if type %}{{ type }}{% else %}4{% endif %}</p>
+<p id="testType" hidden>{% if type %}{{ type }}{% else %}1{% endif %}</p>
 
 
 <!-- JavaScript for typing test -->
-<script type="text/javascript" src="../../static/scripts/typing-test-script.js"></script>
+<script type="text/javascript" src="../../static/scripts/typingtest-test-after.js"></script>
 
 <script type="text/javascript">
 
