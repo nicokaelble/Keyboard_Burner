@@ -38,41 +38,6 @@
     <!-- Import Google chart loader -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    <!-- Script to define Chart (insertet here because jinja tags don't work in external .js files )-->
-    <script type="text/javascript">
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-
-            var data = google.visualization.arrayToDataTable([
-                ['Test Nr.', 'Speed', 'Mistakes'],
-                {% if typingtests %}
-        {% for row in typingtests %}
-        ['Test{{ loop.index }}', {{ row.speed }}, {{ row.mistakes }}],
-            {% endfor %}
-        {% endif %}
-                ]);
-
-
-        var options = {
-
-            title: 'Progress',
-            subtitle: 'Speed in correct Characters per minute and accuracy in %',
-            legend: { position: 'right' },
-
-        };
-
-        var LineChartDiv = document.getElementById('line_chart')
-        if (typeof (LineChartDiv) != 'undefined' && LineChartDiv != null) {
-            var chart = new google.visualization.LineChart(LineChartDiv);
-
-            chart.draw(data, options);
-        }
-
-    }
-    </script>
-
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <!-- Custom JavaScript -->

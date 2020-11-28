@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
-
-
-<script type="text/javascript" src="../../static/scripts/auth-profile-script.js"> </script>
-
 {% block content %}
+
 <main role="main" class="container" style="margin-top: 30px;">
     <div class="jumbotron">
         <div class="row" style="margin-bottom: 50px; padding-left: 20px">
@@ -16,7 +13,8 @@
                 <div class="col-sm-5" style="display: table; height: 300px; #position: relative; overflow: hidden;">
                     <div style="#position: absolute; #top: 50%;display: table-cell; vertical-align: middle;">
                         <div style=" #position: relative; #top: -50%">
-                            <h3>The graph on the right shows your individual progress on your test results.</h3>
+                            <h3 id="graphDescriptor">The graph on the right shows your individual progress on your test
+                                results.</h3>
                         </div>
                     </div>
                 </div>
@@ -80,5 +78,46 @@
     <input type="text" name="accuracy" id="accuracy" value="unknown" hidden>
     <input type="text" name="date" id="date" value="unknown" hidden>
 </form>
+
+<script type="text/javascript" src="../../static/scripts/auth-profile.js"> </script>
+
+<!-- Script to define Chart (insertet here because jinja tags don't work in external .js files )-->
+<script type="text/javascript">
+    {% if typingtests %}
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Test Nr.', 'Speed', 'Mistakes'],
+
+            {% for row in typingtests %}
+    ['Test{{ loop.index }}', {{ row.speed }}, {{ row.mistakes }}],
+        {% endfor %}
+   
+            ]);
+
+
+    var options = {
+
+        title: 'Progress',
+        subtitle: 'Speed in correct Characters per minute and accuracy in %',
+        legend: { position: 'right' },
+
+    };
+
+    var LineChartDiv = document.getElementById('line_chart')
+    if (typeof (LineChartDiv) != 'undefined' && LineChartDiv != null) {
+        var chart = new google.visualization.LineChart(LineChartDiv);
+
+        chart.draw(data, options);
+    }
+
+}
+    {% else %}
+    document.getElementById('graphDescriptor').innerHTML = "A graph on the right would show your learning progress but it's hard for an algorithm to drow non existing points. Finish a typing test and come again and it will display a beautiful graph using the google chart libary :)"
+    {% endif %}
+</script>
 
 {% endblock content %}

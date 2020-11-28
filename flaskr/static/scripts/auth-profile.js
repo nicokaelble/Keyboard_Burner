@@ -37,6 +37,5 @@ function toggleDataTable() {
         document.getElementById('data').hidden = true;
         hidden = true;
     }
-
 }
 
