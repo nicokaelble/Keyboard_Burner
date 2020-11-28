@@ -1,19 +1,3 @@
-let hidden = true;
-function toggleDataTable() {
-    if (hidden) {
-        document.getElementById('toggleData').innerHTML = 'HIDE DETAILS <i id="toggleIcon" class="fas fa-chevron-up"></i>';
-        document.getElementById('toggleIcon').classList.replace('fa-chevron-down', 'ffa-chevron-up');
-        document.getElementById('data').hidden = false;
-        hidden = false;
-    } else {
-        document.getElementById('toggleData').innerHTML = 'MORE DETAILS <i id="toggleIcon" class="fas fa-chevron-down"></i>';
-        document.getElementById('toggleIcon').classList.replace('ffa-chevron-up', 'fa-chevron-down');
-        document.getElementById('data').hidden = true;
-        hidden = true;
-    }
-
-}
-
 function downloadResult(downloadRowButton) {
     row = parseInt(downloadRowButton.id)
 
@@ -38,7 +22,21 @@ function downloadResult(downloadRowButton) {
 
 
     //alert("speed:" + speed + "\nduration: " + duration + mistakes1 + correctCharacters + accuracy + date)
+}
 
+let hidden = true;
+function toggleDataTable() {
+    if (hidden) {
+        document.getElementById('toggleData').innerHTML = 'HIDE DETAILS <i id="toggleIcon" class="fas fa-chevron-up"></i>';
+        document.getElementById('toggleIcon').classList.replace('fa-chevron-down', 'ffa-chevron-up');
+        document.getElementById('data').hidden = false;
+        hidden = false;
+    } else {
+        document.getElementById('toggleData').innerHTML = 'MORE DETAILS <i id="toggleIcon" class="fas fa-chevron-down"></i>';
+        document.getElementById('toggleIcon').classList.replace('ffa-chevron-up', 'fa-chevron-down');
+        document.getElementById('data').hidden = true;
+        hidden = true;
+    }
 
 }
 

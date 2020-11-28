@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 
+
+<script type="text/javascript" src="../../static/scripts/auth-profile-script.js"> </script>
+
 {% block content %}
 <main role="main" class="container" style="margin-top: 30px;">
     <div class="jumbotron">
@@ -49,7 +52,8 @@
                         {% for test in typingtests %}
                         <tr>
                             <th scope="row">{{ loop.index }} <button type="button" class="btn btn-link"><i
-                                        id="{{ loop.index }}downloadRow" class="fas fa-download" onclick="downloadResult(this)" ></i></button></th>
+                                        id="{{ loop.index }}downloadRow" class="fas fa-download"
+                                        onclick="downloadResult(this)"></i></button></th>
                             <td>{{ test.speed }} characters/min</td>
                             <td>{{ test.duration }} sec</td>
                             <td>{{ test.mistakes }} </td>
@@ -76,7 +80,5 @@
     <input type="text" name="accuracy" id="accuracy" value="unknown" hidden>
     <input type="text" name="date" id="date" value="unknown" hidden>
 </form>
-
-<script type="text/javascript" src="../../static/scripts/auth-profile-script.js"> </script>
 
 {% endblock content %}
