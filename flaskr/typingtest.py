@@ -9,7 +9,7 @@ from datetime import datetime
 
 from flaskr.db import get_db
 
-# create blueprint named 'auth'
+# create blueprint named 'typingtest'
 bp = Blueprint('typingtest', __name__, url_prefix='/typingtest')
 
 @bp.route('/result', methods=('GET', 'POST'))
@@ -126,7 +126,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('user.login'))
 
         return view(**kwargs)
 

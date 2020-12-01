@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request 
+from flask import Flask, render_template, request, url_for, redirect
 
 
 def create_app(test_config=None):
@@ -25,6 +25,10 @@ def create_app(test_config=None):
         pass
 
     @app.route('/')
+    def route():
+        return redirect(url_for('home'))
+
+
     @app.route('/home')
     def home():
         return render_template('/home.html')
@@ -40,8 +44,8 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # register blueprint for athentification
-    from . import auth
-    app.register_blueprint(auth.bp)
+    from . import user
+    app.register_blueprint(user.bp)
 
     # register blueprint for typing test
     from . import typingtest

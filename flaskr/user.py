@@ -1,5 +1,4 @@
-import functools
-
+from functools import wraps
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -8,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flaskr.db import get_db
 
 # create blueprint named 'auth'
-bp = Blueprint('auth', __name__, url_prefix='/auth')
+bp = Blueprint('user', __name__, url_prefix='/user')
 
 #page that manages the registration of a user
 @bp.route('/register', methods=('GET', 'POST'))
@@ -74,7 +73,7 @@ def register():
 
 
     # if GET: render registration page
-    return render_template('auth/register.html',username=username)
+    return render_template('user/register.html',username=username)
 
 # page that manages the user login
 @bp.route('/login', methods=('GET', 'POST'))
@@ -110,21 +109,8 @@ def login():
             return redirect(url_for('home'))
 
     # if GET: reder login page
-    return render_template('auth/login.html', username=username)#
+    return render_template('user/login.html', username=username)#
 
-@bp.route('/profile')
-def profile():
-    userId = g.user['id']
-
-    typingtests = get_db().execute(
-    'SELECT *' 
-    ' FROM testresult t LEFT JOIN user u ON t.userId = u.id'
-    ' WHERE u.id = ?'
-    ' ORDER BY t.timestamp ASC',
-    (userId,)
-    ).fetchall()
-
-    return render_template('auth/profile.html', typingtests=typingtests)
 
 
 # page to logout and redirect to index page
@@ -147,13 +133,26 @@ def load_logged_in_user():
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
 
-# function to manage views for which a login is required
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('user.login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
-        return view(**kwargs)
+#login is required for pofile
+@bp.route('/profile')
+@login_required
+def profile():
+    userId = session.get('user_id')
 
-    return wrapped_view
+    typingtests = get_db().execute(
+    'SELECT *' 
+    ' FROM testresult t LEFT JOIN user u ON t.userId = u.id'
+    ' WHERE u.id = ?'
+    ' ORDER BY t.timestamp ASC',
+    (userId,)
+    ).fetchall()
+
+    return render_template('user/profile.html', typingtests=typingtests)

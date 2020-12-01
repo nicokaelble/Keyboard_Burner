@@ -19,4 +19,3 @@ CREATE TABLE testresult(
   accuracy DOUBLE NOT NULL,
   FOREIGN KEY (userId) REFERENCES user (id)
 );
-

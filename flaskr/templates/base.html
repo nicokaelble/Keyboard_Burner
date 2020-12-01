@@ -24,9 +24,7 @@
     <title>{% block title %}{% endblock %} - Keyboard Burner</title>
 
     <!-- Custom styles -->
-    <link href="../static/style/custom.css" rel="stylesheet">
     <link href="../static/style/typing-test-style.css" rel="stylesheet">
-
 
     <!-- Import font awsome Icon libary -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
@@ -37,9 +35,7 @@
 
     <!-- Import Google chart loader -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+    
     <!-- Custom JavaScript -->
     <script type="text/javascript" src="../static/scripts/script.js"></script>
 
@@ -79,21 +75,21 @@
                 <!-- if a user is logged in show user name and logout button -->
                 <div class="nav-item" id="userdisplay">
                     <p style="color:white; margin-bottom: 0px; margin-right: 20px;">
-                        <a class="navbar-brand" style="margin-right: 0px;" href="# ">
-                            <img src="../static/images/user-white.png" height="50px " alt=" ">
+                        <a href="{{ url_for('user.profile') }}" style="color: white; text-decoration: none;">
+                            <i class="fas fa-user fa-lg" style="margin-right: 10px;"></i>
                         </a>
-                        <a href="{{ url_for('auth.profile') }}" style="color: white;">
+                        <a href="{{ url_for('user.profile') }}" style="color: white;">
                             {{ g.user['username'] }}
                         </a>
                     </p>
                 </div>
-                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-success" role="button">Logout</a>
+                <a href="{{ url_for('user.logout') }}" class="btn btn-outline-success" role="button">Logout</a>
                 {% else %}
                 <!-- if not show register and login button -->
 
-                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-success" role="button"
+                <a href="{{ url_for('user.register') }}" class="btn btn-outline-success" role="button"
                     style="margin-right: 10px;">Register</a>
-                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-success" role="button">Login</a>
+                <a href="{{ url_for('user.login') }}" class="btn btn-outline-success" role="button">Login</a>
 
                 {% endif %}
             </form>
