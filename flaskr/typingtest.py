@@ -121,17 +121,6 @@ def load_logged_in_user():
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
 
-# function to manage views for which a login is required
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('user.login'))
-
-        return view(**kwargs)
-
-    return wrapped_view
-
 def getCurrentDatetimeAsString():
 
     now = datetime.now() # current date and time

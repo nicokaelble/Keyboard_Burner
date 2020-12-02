@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<main role="main" class="container" style="margin-top: 30px;">
+
+
+    <div class="jumbotron">
+
+        <div class="row d-flex justify-content-center">
+            <h1 style="margin-bottom: 50px;">How to use <span style="color: #FFC000;">Keyborad Burner</span>...</h1>
+        </div>
+
+        <div class="row">
+            <div style="margin: 10px; margin-top: 0px; text-align: left;">
+                <div style="text-align: center;">
+                    <hr class="my-4" style="margin-bottom: 0px;">
+                    <h3 style="margin-bottom: 20px;">Keyboard Burner offers many cool features and options.</h3>
+                    <h3 style="margin-bottom: 20px;">But what good are these options if you do not know how to use them?</h3>
+                    <h3>That's why the following describes how to use Keyboard Burner, to get the most out of it and have fun!</h3>
+                </div>
+                <hr class="my-4" style="margin-bottom: 0px;">
+                <h1 style="margin-bottom: 30px; margin-top: 60px;"><strong>1. Test your typing speed</strong></h1>
+                <h3 style="margin-bottom: 40px;">
+                    <ul>
+                        <li style="margin-bottom: 20px;">To test your typing speed simply click <a
+                                href="{{ url_for('typingtest.test') }}">here</a> or on "Typing Test" in the top Navigation bar and
+                            the following screen will appear</li>
+                        <img src="../static/images/Typing_Test.png" alt="Typing test page"
+                            style="width: 100%; margin-bottom: 30px;">
+                        <li style="margin-bottom: 20px;">Click on the green button "Start Test" and an audible and
+                            visual countdown will
+                            start </li>
+                        <li style="margin-bottom: 20px;">After the countdown, the text input field will be automatically
+                            focused and you can start typing</li>
+                        <li style="margin-bottom: 20px;">Be aware that you have to type the whole displayed quote in
+                            correctly before it will display a new quote (You surely want to train to type precisely)
+                        </li>
+                    </ul>
+                </h3>
+                <h1></h1>
+            </div>
+
+        </div>
+    </div>
+</main>
+{% endblock content %}

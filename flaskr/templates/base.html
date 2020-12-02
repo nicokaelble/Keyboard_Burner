@@ -58,14 +58,18 @@
             <ul class="navbar-nav mr-auto">
 
                 <li class="nav-item" id="homeNav">
-                    <a class="nav-link" href="/home"><i class="fas fa-home"></i> Home</a>
+                    <a class="nav-link" href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a>
                 </li>
                 <li class="nav-item " id="aboutNav">
-                    <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    <a class="nav-link" href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
                 </li>
                 <li class="nav-item " id="testNav">
                     <a class="nav-link" href="{{ url_for('typingtest.test') }}"><i class="fas fa-tachometer-alt"></i>
                         Typing Test</a>
+                </li>
+                <li class="nav-item " id="testNav">
+                    <a class="nav-link" href="{{ url_for('howTo') }}"><i class="fas fa-question-circle"></i>
+                        How-to</a>
                 </li>
             </ul>
 

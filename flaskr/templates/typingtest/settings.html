@@ -10,8 +10,13 @@
         <div class="form-group">
             <label for="compselect">Timer</label>
             <select class="selectpicker form-control" name="timerSecs" id="comp_select">
-                {% for o in secs %}
-                <option value="{{ o }}">{{ o }} sec</option>
+                {% for s in secs %}
+                {% if  s == 60 %}
+                <option value="{{ s }}" selected="selected">{{ s }} sec</option>
+                {% else %}
+                <option value="{{ s }}">{{ s }} sec</option>
+                {% endif %}
+                
                 {% endfor %}
             </select>
         </div>
