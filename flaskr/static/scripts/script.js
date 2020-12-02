@@ -38,7 +38,7 @@ function generatePDF() {
     html2pdf()
         .set({ html2canvas: { scale: 4 } })
         .from(element)
-        .save();
+        .save("My Typing Certificate");
 }
 
 //Format Date to look nice

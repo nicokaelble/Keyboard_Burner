@@ -159,6 +159,10 @@ async function renderNewText() {
 
 // 1. Disable textinput, hide start button and start countdown (3...2...1...GO)
 function btnStart_Click() {
+    //reset speed, mistakes, correct chars
+    speedDisplayValue.innerHTML = "0"
+    correctDiplayElement.innerHTML = "0"
+    mistakeCountElement.innerHTML = "0"
 
     //show span for speed
     speedDisplayElement.removeAttribute('hidden')
@@ -202,7 +206,7 @@ function countdown() {
 
 // 3. Enable typing
 function enableTyping() {
-
+    
     //enable typing
     textInputElement.readOnly = false;
     textInputElement.value = "";
@@ -269,7 +273,9 @@ function testFinishedHandler() {
     else {
         accuracy = (100 - ((mistakesCounter / correctCharacterCounter) * 100)).toFixed(2);
     }
-
+    speedDisplayValue.innerHTML = "0"
+    correctDiplayElement.innerHTML = "0"
+    mistakeCountElement.innerHTML = "0"
     speedDisplayElement.hidden = true
 
     //fill hiden input elements with test result values
@@ -404,6 +410,9 @@ function btnReset_Click() {
     btnContinue.hidden = true;
 
     //hide speed
+    speedDisplayValue.innerHTML = "0"
+    correctDiplayElement.innerHTML = "0"
+    mistakeCountElement.innerHTML = "0"
     speedDisplayElement.hidden = true
 }
 
