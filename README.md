@@ -1,9 +1,12 @@
 # Keyboard_Burner
 
-Keyboard burner is not just a boring typing website like any other.
-With keyboard burner you not only take your typing speed to another level but also learn famous quotes and their authors.
+Keyboard Burner is a website project that was made to improve the users typing speed by typing funny and famous quotes.
 
-It also is my first Website Project, so please do not get mad about bugs but report them to me at nicokaelble@gmail.com :)
+The website was developed as part of a coursework for the module Advanced Web Technology at the Edinburgh Napier University.
 
-There are also special countdown sound effects used ^^
+According to the coursework specifications this website was developed under the topic "Online Education Technologies" and with the use of the micro web framework flask.
+
+It also is my first website project, so if you dicover any bugs or you have any suggestions for improvement please send me a mail at nicokaelble@gmail.com :)
+
+
 
